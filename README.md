@@ -16,6 +16,8 @@
   * Android Support Repository
 
 4. (Optional) Install "Kotlin" plugin for Android Studio
+5. (Optional) Add the following line to your `~/.gradle/gradle.properties`
+`org.gradle.daemon=true`
 
 ## Build
 
