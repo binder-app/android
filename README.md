@@ -14,7 +14,6 @@
   * SDK Platform
 * Extras
   * Android Support Repository
-  * Android Suppport Library
 
 4. (Optional) Install "Kotlin" plugin for Android Studio
 
