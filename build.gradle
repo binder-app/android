@@ -14,8 +14,12 @@ android {
 
     buildTypes {
         release {
-            runProguard false
+            minifyEnabled false
             proguardFile getDefaultProguardFile('proguard-android.txt')
         }
     }
+}
+
+task wraper(type: Wrapper) {
+    gradleVersion = '2.7'
 }
