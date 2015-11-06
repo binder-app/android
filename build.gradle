@@ -38,5 +38,6 @@ repositories {
     mavenCentral()
 }
 dependencies {
+    compile 'com.android.support:support-v4:21.0.0'
     androidTestCompile 'com.android.support.test:testing-support-lib:0.1'
 }
