@@ -25,7 +25,7 @@ public class SwipeViewActivity extends FragmentActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_profile_view, container, false);
             Bundle args = getArguments();
-            ((TextView) rootView.findViewById(android.R.id.userNameTextView)).setText(
+            ((TextView) rootView.findViewById(R.id.userNameTextView)).setText(
                     Integer.toString(args.getInt(ARG_OBJECT)));
             return rootView;
         }
