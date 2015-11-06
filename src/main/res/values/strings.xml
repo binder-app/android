@@ -2,4 +2,6 @@
 <resources>
     <string name="app_name">MainActivity</string>
     <string name="server">http://getbinder.ddns.net</string>
+    <string name="previously_started">PREVIOUSLY_STARTED</string>
+    <string name="start_binding">START BINDING</string>
 </resources>
