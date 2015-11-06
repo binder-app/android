@@ -11,5 +11,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".FirstLaunchActivity"
+                  android:label="FirstLaunchActivity"
+                  android:noHistory="true">
+        </activity>
     </application>
 </manifest>

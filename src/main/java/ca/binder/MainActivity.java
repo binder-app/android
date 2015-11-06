@@ -47,7 +47,7 @@ public class MainActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
 
         Log.v(LOG_HEADER, "onActivityResult: " + requestCode + ":" + resultCode + ":" + data);
-        if(requestCode == 12345){   //Handle FirstLaunchActivity result
+        if(requestCode == 12345 && data != null){   //Handle FirstLaunchActivity result
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
             SharedPreferences.Editor edit = sharedPreferences.edit();
 
@@ -55,5 +55,10 @@ public class MainActivity extends Activity {
             edit.putBoolean(getString(R.string.previously_started), data.getBooleanExtra("finished", false));
             edit.commit();
         }
+    }
+
+    //Ensure back does not navigate back to other pages, not necessary for functionality
+    @Override
+    public void onBackPressed() {
     }
 }

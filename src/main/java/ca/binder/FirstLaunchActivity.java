@@ -20,14 +20,14 @@ public class FirstLaunchActivity extends Activity{
      * Called when the user presses their START BINDING button to commence binding
      * @param v - The Button View that was pressed to call this method
      */
-    private void onFinishSetup(View v){
+    public void onFinishSetup(View v){
         //TODO: Define methods: validateForms, createProfile
         //TODO: Only finish() if above methods return true
-        if(validateForms()){
-            if(createProfile()){
-                //finish
-            }
-        }
+//        if(validateForms()){
+//            if(createProfile()){
+//                //finish
+//            }
+//        }
         Intent returnIntent = new Intent();
         returnIntent.putExtra("finished", true);
         setResult(Activity.RESULT_OK, returnIntent);
@@ -40,5 +40,10 @@ public class FirstLaunchActivity extends Activity{
 
     private boolean createProfile(){
         return false;
+    }
+
+    //Ensure back does not navigate away from profile creation page
+    @Override
+    public void onBackPressed() {
     }
 }
