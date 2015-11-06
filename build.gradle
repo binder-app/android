@@ -32,7 +32,7 @@ android {
 }
 
 task wraper(type: Wrapper) {
-    gradleVersion = '2.7'
+    gradleVersion = '2.8'
 }
 repositories {
     mavenCentral()
