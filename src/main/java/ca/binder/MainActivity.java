@@ -47,7 +47,6 @@ public class MainActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == FIRST_LAUNCH_REQUEST && data != null){   //Handle FirstLaunchActivity result
-            Log.v(LOG_HEADER, "onActivityResult: " + requestCode + ":" + resultCode + ":" + data);
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
             SharedPreferences.Editor edit = sharedPreferences.edit();
 

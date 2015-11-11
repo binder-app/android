@@ -30,7 +30,7 @@ public class FirstLaunchActivity extends Activity {
     final String LOG_HEADER = "MYLOG###";
 
     ImageView uploadImageView;
-    private Uri imageUri;
+    private Uri photopath;
     private final int IMAGE_CAPTURE_REQUEST_CODE = 9999;
 
     File photo;
@@ -43,42 +43,9 @@ public class FirstLaunchActivity extends Activity {
         uploadImageView.setImageDrawable(getDrawable(R.drawable.add_user));
         setupOnClickListenerForImage();
 
-
         fillYearSpinner();
     }
 
-    private void setupOnClickListenerForImage() {
-        uploadImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-                File file = new File(Environment.getExternalStorageDirectory(), "photo.jpg");
-                Uri photopath = Uri.fromFile(file);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, file);
-
-                startActivityForResult(intent, IMAGE_CAPTURE_REQUEST_CODE);
-            }
-        });
-    }
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == IMAGE_CAPTURE_REQUEST_CODE) {
-            Log.v(LOG_HEADER, "ohboyohboyohboy");
-            if(resultCode == RESULT_OK) {
-                Bundle extras = data.getExtras();
-
-                Bitmap bm = (Bitmap) extras.get("data");
-
-                uploadImageView.setImageBitmap(bm);
-            }
-            else {
-                Toast.makeText(this, "Photo was not taken", Toast.LENGTH_SHORT);
-            }
-        }
-    }
 
     /**
      * Create list of years available and populate the spinner with those options
@@ -101,6 +68,41 @@ public class FirstLaunchActivity extends Activity {
         //Use adapter to fill Spinner View
         Spinner spinner = (Spinner)findViewById(R.id.year_input);
         spinner.setAdapter(adapter);
+    }
+
+
+    private void setupOnClickListenerForImage() {
+        uploadImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                File file = new File(Environment.getExternalStorageDirectory(), "okokok.jpg");
+                photopath = Uri.fromFile(file);
+                Log.v(LOG_HEADER, photopath.toString());
+                if(photopath != null){
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, photopath);
+                }
+                startActivityForResult(intent, IMAGE_CAPTURE_REQUEST_CODE);
+            }
+        });
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == IMAGE_CAPTURE_REQUEST_CODE) {
+            if(resultCode == RESULT_OK && data != null) {
+                photo = BinderUtilities.findImageFileFromUri(photopath, this);
+
+                Bitmap bitmap = BinderUtilities.convertFileToBitmap(photo);
+                uploadImageView.setImageBitmap(bitmap);
+                //TODO: Turn photo into image that uploadImageView can use
+            }
+            else {
+                Toast.makeText(this, "Photo was not taken", Toast.LENGTH_SHORT);
+            }
+        }
     }
 
 
@@ -182,7 +184,6 @@ public class FirstLaunchActivity extends Activity {
 
         return false;
     }
-
 
     //Ensure back does not navigate away from profile creation page
     @Override
