@@ -5,7 +5,8 @@ import android.app.Application;
 import com.facebook.stetho.Stetho;
 
 /**
- * Created by mitch4980 on 11/6/2015.
+ * @author Mitchell Hentges
+ * @since 11/6/2015
  */
 public class BinderApplication extends Application {
     @Override
