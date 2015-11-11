@@ -14,6 +14,6 @@ import ca.binder.domain.IPhoto;
 public class NullPhoto implements IPhoto {
     @Override
     public Drawable getDrawable(Context context) {
-        return ContextCompat.getDrawable(context, R.drawable.defaultPhoto);
+        return ContextCompat.getDrawable(context, R.drawable.default_photo);
     }
 }
