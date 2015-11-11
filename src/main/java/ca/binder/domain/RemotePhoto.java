@@ -28,6 +28,7 @@ public class RemotePhoto implements IPhoto {
 
     @Override
     public Drawable getDrawable() {
+        //TODO
         return null;
     }
 }

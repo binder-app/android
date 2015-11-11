@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 public class InternalPhoto implements IPhoto {
     @Override
     public Drawable getDrawable() {
+        //TODO
         return null;
     }
 }
