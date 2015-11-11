@@ -2,7 +2,6 @@ package ca.binder.remote.request;
 
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
 
 import org.json.JSONObject;
 
@@ -10,7 +9,7 @@ import java.io.IOException;
 
 import ca.binder.domain.Profile;
 import ca.binder.remote.IServerRequest;
-import ca.binder.remote.ProfileBinding;
+import ca.binder.remote.binding.ProfileBinding;
 import ca.binder.remote.Server;
 
 /**

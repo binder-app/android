@@ -1,4 +1,4 @@
-package ca.binder.remote;
+package ca.binder.remote.binding;
 
 import org.json.JSONArray;
 import org.json.JSONException;

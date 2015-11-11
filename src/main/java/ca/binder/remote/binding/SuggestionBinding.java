@@ -1,5 +1,7 @@
 package ca.binder.remote.binding;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,6 +21,7 @@ public class SuggestionBinding implements JsonToModelBinding<Suggestion> {
             String bio = json.getString("bio");
 
             if (id == null || name == null || bio == null) {
+                Log.w("SuggestionBinding", "server didn't provide or returned null value");
                 return null;
             }
 
