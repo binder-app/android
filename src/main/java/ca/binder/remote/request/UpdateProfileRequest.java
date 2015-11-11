@@ -8,7 +8,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 import ca.binder.domain.Profile;
-import ca.binder.remote.IServerRequest;
 import ca.binder.remote.binding.ProfileBinding;
 import ca.binder.remote.Server;
 

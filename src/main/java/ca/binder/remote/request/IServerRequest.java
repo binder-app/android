@@ -1,4 +1,6 @@
-package ca.binder.remote;
+package ca.binder.remote.request;
+
+import ca.binder.remote.Server;
 
 /**
  * @author Mitchell Hentges

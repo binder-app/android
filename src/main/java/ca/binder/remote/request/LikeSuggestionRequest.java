@@ -5,7 +5,6 @@ import com.squareup.okhttp.RequestBody;
 
 import java.io.IOException;
 
-import ca.binder.remote.IServerRequest;
 import ca.binder.remote.Server;
 
 /**

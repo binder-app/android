@@ -1,7 +1,9 @@
-package ca.binder.domain;
+package ca.binder.remote;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+
+import ca.binder.domain.IPhoto;
 
 /**
  * Represents an image which is downloaded from a remote server. Will block current thread on

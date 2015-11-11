@@ -5,7 +5,7 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import ca.binder.domain.NullPhoto;
+import ca.binder.android.NullPhoto;
 import ca.binder.domain.Suggestion;
 
 /**

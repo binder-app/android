@@ -1,4 +1,4 @@
-package ca.binder.domain;
+package ca.binder.android;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -7,6 +7,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 import java.io.File;
+
+import ca.binder.domain.IPhoto;
 
 /**
  * A photo which is stored on the current device as a file.

@@ -1,10 +1,11 @@
-package ca.binder.domain;
+package ca.binder.android;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 
 import ca.binder.R;
+import ca.binder.domain.IPhoto;
 
 /**
  * @author Mitchell Hentges

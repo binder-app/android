@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.binder.domain.Suggestion;
-import ca.binder.remote.IServerRequest;
 import ca.binder.remote.Server;
 import ca.binder.remote.binding.SuggestionBinding;
 

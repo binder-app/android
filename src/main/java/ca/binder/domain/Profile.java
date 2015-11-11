@@ -3,6 +3,8 @@ package ca.binder.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import ca.binder.android.InternalPhoto;
+
 /**
  * @author Mitchell Hentges
  * @since 11/11/2015
