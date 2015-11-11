@@ -1,5 +1,6 @@
 package ca.binder.domain;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 
 /**
@@ -10,6 +11,7 @@ public interface IPhoto {
     /**
      * Provides the {@link Drawable} format of the image
      * @return {@link Drawable}
+     * @param context
      */
-    Drawable getDrawable();
+    Drawable getDrawable(Context context);
 }

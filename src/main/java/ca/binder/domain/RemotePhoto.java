@@ -1,10 +1,11 @@
 package ca.binder.domain;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 
 /**
  * Represents an image which is downloaded from a remote server. Will block current thread on
- * {@link #getDrawable()} unless already {@link #downloaded()}
+ * {@link IPhoto#getDrawable(Context)} unless already {@link #downloaded()}
  *
  * @author Mitchell Hentges
  * @since 11/11/2015
@@ -27,7 +28,7 @@ public class RemotePhoto implements IPhoto {
     }
 
     @Override
-    public Drawable getDrawable() {
+    public Drawable getDrawable(Context context) {
         //TODO
         return null;
     }

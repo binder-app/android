@@ -25,9 +25,8 @@ public class InternalPhoto implements IPhoto {
     }
 
     @Override
-    public Drawable getDrawable() {
+    public Drawable getDrawable(Context context) {
         Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-        BitmapDrawable drawable = new BitmapDrawable(context.getResources(), bitmap);
-        return drawable;
+        return new BitmapDrawable(this.context.getResources(), bitmap);
     }
 }
