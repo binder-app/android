@@ -14,6 +14,8 @@ public class MainActivity extends Activity {
 
     final String LOG_HEADER = "MYLOG###";
 
+    private final int FIRST_LAUNCH_REQUEST = 12345;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
@@ -30,10 +32,10 @@ public class MainActivity extends Activity {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         boolean previouslyStarted = sharedPreferences.getBoolean(getString(R.string.previously_started), false);
 
-        if(!previouslyStarted){
+        //if(!previouslyStarted){
             Intent intent = new Intent(this, FirstLaunchActivity.class);
-            startActivityForResult(intent, 12345);
-        }
+            startActivityForResult(intent, FIRST_LAUNCH_REQUEST);
+        //}
     }
 
     /**
@@ -44,10 +46,8 @@ public class MainActivity extends Activity {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        Log.v(LOG_HEADER, "onActivityResult: " + requestCode + ":" + resultCode + ":" + data);
-        if(requestCode == 12345 && data != null){   //Handle FirstLaunchActivity result
+        if(requestCode == FIRST_LAUNCH_REQUEST && data != null){   //Handle FirstLaunchActivity result
+            Log.v(LOG_HEADER, "onActivityResult: " + requestCode + ":" + resultCode + ":" + data);
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
             SharedPreferences.Editor edit = sharedPreferences.edit();
 
