@@ -8,11 +8,6 @@ import android.graphics.drawable.Drawable;
  */
 public interface IPhoto {
     /**
-     * Downloads the photo from remote resource
-     */
-    void download();
-
-    /**
      * Provides the {@link Drawable} format of the image
      * @return {@link Drawable}
      */
