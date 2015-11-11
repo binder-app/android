@@ -1,5 +1,10 @@
 package ca.binder.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import ca.binder.android.InternalPhoto;
+
 /**
  * @author Mitchell Hentges
  * @since 11/11/2015
@@ -12,6 +17,7 @@ public class Profile {
     private String phone;
     private int year;
     private InternalPhoto photo;
+    private List<Course> courses = new ArrayList<>();
 
     public Profile(String id) {
         this.id = id;
@@ -45,6 +51,10 @@ public class Profile {
         return photo;
     }
 
+    public List<Course> getCourses() {
+        return courses;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -63,6 +73,14 @@ public class Profile {
 
     public void setYear(int year) {
         this.year = year;
+    }
+
+    public void addCourse(Course course) {
+        courses.add(course);
+    }
+
+    public void removeCourse(Course course) {
+        courses.remove(course);
     }
 
     //todo setting photo

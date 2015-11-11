@@ -50,6 +50,11 @@ public class ProfileBuilder {
         return this;
     }
 
+    public ProfileBuilder course(Course course) {
+        profile.addCourse(course);
+        return this;
+    }
+
     public Profile build() {
         return profile;
     }
