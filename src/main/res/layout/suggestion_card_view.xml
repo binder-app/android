@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#FFFFFF"
+              android:orientation="vertical"
+    android:weightSum="1">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_weight=".04"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/suggestionNameTextView"
+            android:layout_width="125dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".75"
+            android:gravity="center_vertical"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#000000"/>
+
+        <ImageView
+            android:id="@+id/infoButtonImageView"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:layout_weight=".25"
+            android:src="@drawable/androidinformation" />
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_weight=".04"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/suggestionProgramTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".04"
+            android:gravity="center_vertical"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#000000"/>
+
+        <TextView
+            android:id="@+id/suggestionYearTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".04"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#000000"/>
+    </TableRow>
+
+    <ImageView
+        android:id="@+id/suggestionPhotoImageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.64"
+        android:background="#494c4141" />
+
+    <TextView
+        android:id="@+id/suggestionBioTextView"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_weight=".29"
+        android:padding="2dp"
+        android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#000000"/>
+
+</LinearLayout>
