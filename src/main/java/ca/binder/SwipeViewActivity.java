@@ -4,8 +4,8 @@
  */
 package ca.binder;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import butterknife.*;
 
 
-public class SwipeViewActivity extends FragmentActivity {
+public class SwipeViewActivity extends Activity {
 
 	private final String LOG_TAG = "SwipeViewAcitivity";
 	@Bind(R.id.swipe_view_card_container)
@@ -30,7 +30,6 @@ public class SwipeViewActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_swipe_view);
 		ButterKnife.bind(this);
-
 
 		profiles = new ArrayList<>();
 		profiles.add("test1");
