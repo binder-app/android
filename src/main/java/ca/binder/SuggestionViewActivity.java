@@ -6,7 +6,6 @@ package ca.binder;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,13 +24,12 @@ import java.util.List;
 
 import butterknife.*;
 import ca.binder.android.DeviceInfo;
-import ca.binder.domain.IPhoto;
 import ca.binder.domain.Suggestion;
 import ca.binder.remote.Server;
 import ca.binder.remote.request.GetSuggestionsRequest;
 
 
-public class SwipeViewActivity extends Activity {
+public class SuggestionViewActivity extends Activity {
 
 	private final String LOG_TAG = "SwipeViewAcitivity";
 
@@ -44,7 +42,7 @@ public class SwipeViewActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_swipe_view);
+		setContentView(R.layout.activity_suggestion_view);
 		ButterKnife.bind(this);
 		suggestionsToShow = new ArrayList<Suggestion>();
 
@@ -56,7 +54,7 @@ public class SwipeViewActivity extends Activity {
 		//task.execute(this);
 
 
-		adapter = new SuggestionAdapter(this, R.layout.profile_card_view, suggestionsToShow);
+		adapter = new SuggestionAdapter(this, R.layout.suggestion_card_view, suggestionsToShow);
 
 		flingContainer.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
@@ -83,7 +81,7 @@ public class SwipeViewActivity extends Activity {
 				//Do something on the left!
 				//You also have access to the original object.
 				//If you want to use it just cast it (String) dataObject
-				Toast.makeText(SwipeViewActivity.this, "Left!", Toast.LENGTH_SHORT).show();
+				Toast.makeText(SuggestionViewActivity.this, "Left!", Toast.LENGTH_SHORT).show();
 				// TODO
 			}
 
@@ -94,7 +92,7 @@ public class SwipeViewActivity extends Activity {
 			 */
 			@Override
 			public void onRightCardExit(Object dataObject) {
-				Toast.makeText(SwipeViewActivity.this, "Right!", Toast.LENGTH_SHORT).show();
+				Toast.makeText(SuggestionViewActivity.this, "Right!", Toast.LENGTH_SHORT).show();
 				// TODO
 			}
 
@@ -169,7 +167,7 @@ class SuggestionAdapter extends ArrayAdapter<Suggestion> {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View card = inflater.inflate(R.layout.profile_card_view, parent, false);
+		View card = inflater.inflate(R.layout.suggestion_card_view, parent, false);
 
 		TextView suggestionNameTextView = (TextView) card.findViewById(R.id.suggestionNameTextView);
 		TextView suggestionProgramTextView = (TextView) card.findViewById(R.id.suggestionProgramTextView);
