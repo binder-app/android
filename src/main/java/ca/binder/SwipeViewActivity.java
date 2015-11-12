@@ -1,64 +1,107 @@
+/**
+ * Displays profiles as cards in an adapter.
+ * Uses https://github.com/Diolor/Swipecards
+ */
 package ca.binder;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.Toast;
+
+import com.lorentzos.flingswipe.SwipeFlingAdapterView;
+
+import java.util.ArrayList;
+
+import butterknife.*;
+
 
 public class SwipeViewActivity extends FragmentActivity {
 
-	ProfileCollectionPagerAdapter profileAdapter;
-	ViewPager viewPager;
+	private final String LOG_TAG = "SwipeViewAcitivity";
+	@Bind(R.id.swipe_view_card_container)
+	SwipeFlingAdapterView flingContainer;
+	private ArrayAdapter<String> arrayAdapter;
+	private ArrayList<String> profiles;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_swipe_view);
+		ButterKnife.bind(this);
 
-		// get profile adapter and pager
-		profileAdapter = new ProfileCollectionPagerAdapter(getSupportFragmentManager());
-		viewPager = (ViewPager) findViewById(R.id.swipeViewPager);
-		viewPager.setAdapter(profileAdapter);
+
+		profiles = new ArrayList<>();
+		profiles.add("test1");
+		profiles.add("test2");
+		profiles.add("test3");
+		profiles.add("test4");
+
+		arrayAdapter = new ArrayAdapter<>(this, R.layout.profile_card_view, R.id.userNameTextView, profiles);
+
+
+		flingContainer.setAdapter(arrayAdapter);
+
+		/**
+		 * Listener for swipe events
+		 */
+		flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
+			@Override
+			public void removeFirstObjectInAdapter() {
+				// this is the simplest way to delete an object from the Adapter (/AdapterView)
+				Log.d("LIST", "removed object!");
+				profiles.remove(0);
+				arrayAdapter.notifyDataSetChanged();
+			}
+
+			/**
+			 * Left swipe event
+			 *
+			 * @param dataObject
+			 */
+			@Override
+			public void onLeftCardExit(Object dataObject) {
+				//Do something on the left!
+				//You also have access to the original object.
+				//If you want to use it just cast it (String) dataObject
+				Toast.makeText(SwipeViewActivity.this, "Left!", Toast.LENGTH_SHORT).show();
+				// TODO
+			}
+
+			/**
+			 * Right swipe event
+			 *
+			 * @param dataObject
+			 */
+			@Override
+			public void onRightCardExit(Object dataObject) {
+				Toast.makeText(SwipeViewActivity.this, "Right!", Toast.LENGTH_SHORT).show();
+				// TODO
+			}
+
+			@Override
+			public void onAdapterAboutToEmpty(int itemsInAdapter) {
+				// TODO
+			}
+
+			@Override
+			public void onScroll(float scrollProgressPercent) {
+				// do nothing
+			}
+		});
+
+
+		// Optionally add an OnItemClickListener
+		flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClicked(int itemPosition, Object dataObject) {
+				Log.i(LOG_TAG, "Item " + itemPosition + " clicked!");
+			}
+		});
+
 	}
 
-	public static class ProfileCollectionPagerAdapter extends FragmentStatePagerAdapter {
-		public ProfileCollectionPagerAdapter(FragmentManager fm) {
-			super(fm);
-		}
 
-		@Override
-		public Fragment getItem(int position) {
-			Fragment fragment = new ProfileFragment();
-			Bundle bundle = new Bundle();
-			bundle.putInt(ProfileFragment.ARG_OBJECT, position + 1);
-			fragment.setArguments(bundle);
-			return fragment;
-		}
 
-		@Override
-		public int getCount() {
-			return 100;
-		}
-	}
-
-	public static class ProfileFragment extends Fragment {
-
-		public static final String ARG_OBJECT = "object";
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-			// The last two arguments ensure LayoutParams are inflated
-			// properly.
-			View rootView = inflater.inflate(R.layout.fragment_profile_view, container, false);
-			Bundle args = getArguments();
-			((TextView) rootView.findViewById(R.id.userNameTextView)).setText(Integer.toString(args.getInt(ARG_OBJECT)));
-			return rootView;
-		}
-	}
 }
