@@ -10,7 +10,12 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
@@ -33,7 +38,7 @@ public class SwipeViewActivity extends Activity {
 	@Bind(R.id.swipe_view_card_container)
 	SwipeFlingAdapterView flingContainer;
 
-	private ArrayAdapter<Suggestion> arrayAdapter;
+	private SuggestionAdapter adapter;
 	private List<Suggestion> suggestionsToShow;
 
 	@Override
@@ -42,29 +47,19 @@ public class SwipeViewActivity extends Activity {
 		setContentView(R.layout.activity_swipe_view);
 		ButterKnife.bind(this);
 		suggestionsToShow = new ArrayList<Suggestion>();
+
+
 		createTestSuggestions();
 
-		// gets suggestions from api asynchronously
-		//GetSuggestionTask task = new GetSuggestionTask();
-		//task.execute(getBaseContext());
-
-//		suggestions.add(new Suggestion("id", "Joe", "CS", "Hello", 2, new IPhoto() {
-//			@Override
-//			public Drawable getDrawable(Context context) {
-//				return null;
-//			}
-//		}));
-//		suggestions.add(new Suggestion("id", "Joe", "CS", "Hello", 2, new IPhoto() {
-//			@Override
-//			public Drawable getDrawable(Context context) {
-//				return null;
-//			}
-//		}));
-
-		arrayAdapter = new ArrayAdapter<Suggestion>(this, R.layout.profile_card_view, R.id.userNameTextView, suggestionsToShow);
+		// get suggestions from api asynchronously
+		//GetSuggestionsTask task = new GetSuggestionsTask();
+		//task.execute(this);
 
 
-		flingContainer.setAdapter(arrayAdapter);
+		adapter = new SuggestionAdapter(this, R.layout.profile_card_view, suggestionsToShow);
+
+		flingContainer.setAdapter(adapter);
+		adapter.notifyDataSetChanged();
 
 		/**
 		 * Listener for swipe events
@@ -75,7 +70,7 @@ public class SwipeViewActivity extends Activity {
 				// this is the simplest way to delete an object from the Adapter (/AdapterView)
 				Log.d("LIST", "removed object!");
 				suggestionsToShow.remove(0);
-				arrayAdapter.notifyDataSetChanged();
+				adapter.notifyDataSetChanged();
 			}
 
 			/**
@@ -127,9 +122,14 @@ public class SwipeViewActivity extends Activity {
 
 	private void createTestSuggestions() {
 		suggestionsToShow.add(new Suggestion("1234", "Jeff", "Computing Science", "I am a Jeff", 4, null));
+		suggestionsToShow.add(new Suggestion("1235", "Also Jeff", "Business Administration", "I am another Jeff", 4, null));
+
 	}
 
-	class GetSuggestionTask extends AsyncTask<Context, Void, List<Suggestion>> {
+	/**
+	 * Asynchronously performs GetSuggestions request, update list of suggestions
+	 */
+	class GetSuggestionsTask extends AsyncTask<Context, Void, List<Suggestion>> {
 
 		@Override
 		protected void onPreExecute() {
@@ -152,3 +152,43 @@ public class SwipeViewActivity extends Activity {
 	}
 
 }
+
+/**
+ * Custom adapter inflates card layouts and places suggestion data in card view
+ */
+class SuggestionAdapter extends ArrayAdapter<Suggestion> {
+
+	List<Suggestion> contents;
+
+	public SuggestionAdapter(Context context, int resource, List<Suggestion> objects) {
+		super(context, resource, objects);
+		contents = objects;
+
+	}
+
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View card = inflater.inflate(R.layout.profile_card_view, parent, false);
+
+		TextView suggestionNameTextView = (TextView) card.findViewById(R.id.suggestionNameTextView);
+		TextView suggestionProgramTextView = (TextView) card.findViewById(R.id.suggestionProgramTextView);
+		TextView suggestionYearTextView = (TextView) card.findViewById(R.id.suggestionYearTextView);
+		TextView suggestionBioTextView = (TextView) card.findViewById(R.id.suggestionBioTextView);
+		ImageView suggestionPhotoImageView = (ImageView) card.findViewById(R.id.suggestionPhotoImageView);
+
+		Suggestion suggestion = contents.get(position);
+
+		suggestionNameTextView.setText(suggestion.getName());
+		suggestionProgramTextView.setText(suggestion.getProgram());
+		suggestionYearTextView.setText("Year " + suggestion.getYear());
+		suggestionBioTextView.setText(suggestion.getBio());
+		// TODO photos
+		//suggestionPhotoImageView.setImageDrawable(suggestion.getPhoto().getDrawable(getContext()));
+
+		return card;
+	}
+
+}
+
+
