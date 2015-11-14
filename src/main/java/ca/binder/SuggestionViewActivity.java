@@ -44,19 +44,20 @@ public class SuggestionViewActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_suggestion_view);
 		ButterKnife.bind(this);
-		suggestionsToShow = new ArrayList<Suggestion>();
-
-
-		createTestSuggestions();
-
-		// get suggestions from api asynchronously
-		//GetSuggestionsTask task = new GetSuggestionsTask();
-		//task.execute(this);
-
+		suggestionsToShow = new ArrayList<>();
 
 		adapter = new SuggestionAdapter(this, R.layout.suggestion_card_view, suggestionsToShow);
-
 		flingContainer.setAdapter(adapter);
+
+		//createTestSuggestions();
+
+		// get suggestions from api asynchronously
+		GetSuggestionsTask task = new GetSuggestionsTask();
+		task.execute(this);
+
+		Log.d(LOG_TAG, "Suggestions: " + suggestionsToShow.size());
+
+
 		adapter.notifyDataSetChanged();
 
 		/**
@@ -137,56 +138,61 @@ public class SuggestionViewActivity extends Activity {
 		@Override
 		protected void onPostExecute(List<Suggestion> suggestions) {
 			suggestionsToShow = suggestions;
+			Log.d("GetSuggestionsTask", "Done!");
+			Log.d("GetSuggestionsTask", "Suggestions: " + suggestionsToShow.size());
+			adapter.notifyDataSetChanged();
+
+
 		}
 
 		@Override
 		protected List<Suggestion> doInBackground(Context... context) {
+			Log.d("GetSuggestionsTask", "Doing...");
 			Server server = new Server(Server.API_LOCATION, DeviceInfo.deviceId(context[0]));
 			suggestionsToShow = new GetSuggestionsRequest().request(server);
+
 			return suggestionsToShow;
 		}
 
 
 	}
 
-}
+	/**
+	 * Custom adapter inflates card layouts and places suggestion data in card view
+	 */
+	class SuggestionAdapter extends ArrayAdapter<Suggestion> {
 
-/**
- * Custom adapter inflates card layouts and places suggestion data in card view
- */
-class SuggestionAdapter extends ArrayAdapter<Suggestion> {
+		List<Suggestion> contents;
 
-	List<Suggestion> contents;
+		public SuggestionAdapter(Context context, int resource, List<Suggestion> objects) {
+			super(context, resource, objects);
+			contents = objects;
 
-	public SuggestionAdapter(Context context, int resource, List<Suggestion> objects) {
-		super(context, resource, objects);
-		contents = objects;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			View card = inflater.inflate(R.layout.suggestion_card_view, parent, false);
+
+			TextView suggestionNameTextView = (TextView) card.findViewById(R.id.suggestionNameTextView);
+			TextView suggestionProgramTextView = (TextView) card.findViewById(R.id.suggestionProgramTextView);
+			TextView suggestionYearTextView = (TextView) card.findViewById(R.id.suggestionYearTextView);
+			TextView suggestionBioTextView = (TextView) card.findViewById(R.id.suggestionBioTextView);
+			ImageView suggestionPhotoImageView = (ImageView) card.findViewById(R.id.suggestionPhotoImageView);
+
+			Suggestion suggestion = contents.get(position);
+
+			suggestionNameTextView.setText(suggestion.getName());
+			suggestionProgramTextView.setText(suggestion.getProgram());
+			suggestionYearTextView.setText("Year " + suggestion.getYear());
+			suggestionBioTextView.setText(suggestion.getBio());
+			//TODO photo
+			//suggestionPhotoImageView.setImageDrawable(suggestion.getPhoto().getDrawable(getContext()));
+			return card;
+		}
 
 	}
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View card = inflater.inflate(R.layout.suggestion_card_view, parent, false);
-
-		TextView suggestionNameTextView = (TextView) card.findViewById(R.id.suggestionNameTextView);
-		TextView suggestionProgramTextView = (TextView) card.findViewById(R.id.suggestionProgramTextView);
-		TextView suggestionYearTextView = (TextView) card.findViewById(R.id.suggestionYearTextView);
-		TextView suggestionBioTextView = (TextView) card.findViewById(R.id.suggestionBioTextView);
-		ImageView suggestionPhotoImageView = (ImageView) card.findViewById(R.id.suggestionPhotoImageView);
-
-		Suggestion suggestion = contents.get(position);
-
-		suggestionNameTextView.setText(suggestion.getName());
-		suggestionProgramTextView.setText(suggestion.getProgram());
-		suggestionYearTextView.setText("Year " + suggestion.getYear());
-		suggestionBioTextView.setText(suggestion.getBio());
-		// TODO photos
-		//suggestionPhotoImageView.setImageDrawable(suggestion.getPhoto().getDrawable(getContext()));
-
-		return card;
-	}
-
 }
-
 
