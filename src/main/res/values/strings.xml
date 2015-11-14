@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MainActivity</string>
+    <string name="app_name">Binder</string>
     <string name="server">http://getbinder.ddns.net</string>
     <string name="previously_started">PREVIOUSLY_STARTED</string>
     <string name="start_binding">START BINDING</string>
