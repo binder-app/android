@@ -13,7 +13,8 @@
         android:id="@+id/add_user_image"
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.32"
-        android:nextFocusUp="@id/parent_layout" />
+        android:nextFocusUp="@id/parent_layout"
+        android:src="@drawable/add_user"/>
 
     <EditText
         android:layout_width="match_parent"
