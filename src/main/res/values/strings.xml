@@ -5,4 +5,5 @@
     <string name="previously_started">PREVIOUSLY_STARTED</string>
     <string name="start_binding">START BINDING</string>
     <string name="suggestionsEmptyMsg">No suggestions...check back later!</string>
+    <string name="loadingText">Searching....</string>
 </resources>
