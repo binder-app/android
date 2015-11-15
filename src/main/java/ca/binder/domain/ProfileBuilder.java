@@ -45,7 +45,7 @@ public class ProfileBuilder {
         return this;
     }
 
-    public ProfileBuilder year(int year) {
+    public ProfileBuilder year(String year) {
         profile.setYear(year);
         return this;
     }

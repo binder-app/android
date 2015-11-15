@@ -18,7 +18,9 @@ public class SuggestionBinding implements JsonToModelBinding<Suggestion> {
         try {
             String id = json.getString("id");
             String name = json.getString("name");
+            String program = json.getString("program");
             String bio = json.getString("bio");
+            String year = json.getString("year");
 
             if (id == null || name == null || bio == null) {
                 Log.w("SuggestionBinding", "server didn't provide or returned null value");
@@ -27,10 +29,8 @@ public class SuggestionBinding implements JsonToModelBinding<Suggestion> {
 
             return new Suggestion(
                     id,
-                    name,
-                    "TODO", //TODO
-                    bio,
-                    0, //TODO
+                    name, program,
+                    bio, year,
                     new NullPhoto() //TODO
             );
         } catch (JSONException e) {

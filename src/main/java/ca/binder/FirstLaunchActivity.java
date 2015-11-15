@@ -55,12 +55,12 @@ public class FirstLaunchActivity extends Activity {
     private void fillYearSpinner() {
         //Create array of options
         List<String> array = new ArrayList<>();
-        array.add("1st");
-        array.add("2nd");
-        array.add("3rd");
-        array.add("4th");
-        array.add("5th");
-        array.add("6th");
+        array.add("Year 1");
+        array.add("Year 2");
+        array.add("Year 3");
+        array.add("Year 4");
+        array.add("Year 5");
+        array.add("Year 6");
 
         //Create adapter using above array
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
@@ -195,8 +195,7 @@ public class FirstLaunchActivity extends Activity {
 
         // year
         Spinner spinner = (Spinner) findViewById(R.id.year_input);
-        int year = Integer.parseInt(spinner.getSelectedItem().toString().substring(0, 1));
-        profile.setYear(year);
+        profile.setYear(spinner.getSelectedItem().toString());
 
         // course list
         text = (EditText) findViewById(R.id.class_list);
