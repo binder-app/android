@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
@@ -35,17 +36,26 @@ public class SuggestionViewActivity extends Activity {
 
 	@Bind(R.id.swipe_view_card_container)
 	SwipeFlingAdapterView flingContainer;
-
+	TextView noSuggestionsTextView;
+	ViewSwitcher viewSwitcher;
 	private SuggestionAdapter adapter;
 	private List<Suggestion> suggestionsToShow;
+
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_suggestion_view);
 		ButterKnife.bind(this);
-		suggestionsToShow = new ArrayList<Suggestion>();
 
+		viewSwitcher = (ViewSwitcher) findViewById(R.id.suggestionViewSwitcher);
+		noSuggestionsTextView = (TextView) findViewById(R.id.noSuggestionsTextView);
+
+		suggestionsToShow = new ArrayList<>();
+
+		adapter = new SuggestionAdapter(this, R.layout.suggestion_card_view, suggestionsToShow);
+		flingContainer.setAdapter(adapter);
 
 		createTestSuggestions();
 
@@ -53,11 +63,12 @@ public class SuggestionViewActivity extends Activity {
 		//GetSuggestionsTask task = new GetSuggestionsTask();
 		//task.execute(this);
 
+		Log.d(LOG_TAG, "# of suggestions: " + suggestionsToShow.size());
 
-		adapter = new SuggestionAdapter(this, R.layout.suggestion_card_view, suggestionsToShow);
 
-		flingContainer.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
+		checkForEmptySuggestionList(adapter.getCount());
+
 
 		/**
 		 * Listener for swipe events
@@ -98,7 +109,8 @@ public class SuggestionViewActivity extends Activity {
 
 			@Override
 			public void onAdapterAboutToEmpty(int itemsInAdapter) {
-				// TODO
+				Log.d(LOG_TAG, "Adapter about to empty.." + itemsInAdapter + "items");
+				checkForEmptySuggestionList(itemsInAdapter);
 			}
 
 			@Override
@@ -116,6 +128,20 @@ public class SuggestionViewActivity extends Activity {
 			}
 		});
 
+	}
+
+	/**
+	 * Determines whether the list of suggestions is empty, and pages the ViewSwitcher to show the empty message if so.
+	 * @param numItems the number of items in the adapter
+	 */
+	private void checkForEmptySuggestionList(int numItems) {
+		if (numItems == 0) {
+			Log.d("Suggestions empty?", "empty");
+			viewSwitcher.showNext();
+
+		} else {
+			Log.d("Suggestions empty?", "not empty");
+		}
 	}
 
 	private void createTestSuggestions() {
@@ -137,56 +163,61 @@ public class SuggestionViewActivity extends Activity {
 		@Override
 		protected void onPostExecute(List<Suggestion> suggestions) {
 			suggestionsToShow = suggestions;
+			Log.d("GetSuggestionsTask", "Done!");
+			Log.d("GetSuggestionsTask", "Suggestions: " + suggestionsToShow.size());
+			adapter.notifyDataSetChanged();
+
+
 		}
 
 		@Override
 		protected List<Suggestion> doInBackground(Context... context) {
+			Log.d("GetSuggestionsTask", "Doing...");
 			Server server = new Server(Server.API_LOCATION, DeviceInfo.deviceId(context[0]));
 			suggestionsToShow = new GetSuggestionsRequest().request(server);
+
 			return suggestionsToShow;
 		}
 
 
 	}
 
-}
+	/**
+	 * Custom adapter inflates card layouts and places suggestion data in card view
+	 */
+	class SuggestionAdapter extends ArrayAdapter<Suggestion> {
 
-/**
- * Custom adapter inflates card layouts and places suggestion data in card view
- */
-class SuggestionAdapter extends ArrayAdapter<Suggestion> {
+		List<Suggestion> contents;
 
-	List<Suggestion> contents;
+		public SuggestionAdapter(Context context, int resource, List<Suggestion> objects) {
+			super(context, resource, objects);
+			contents = objects;
 
-	public SuggestionAdapter(Context context, int resource, List<Suggestion> objects) {
-		super(context, resource, objects);
-		contents = objects;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			View card = inflater.inflate(R.layout.suggestion_card_view, parent, false);
+
+			TextView suggestionNameTextView = (TextView) card.findViewById(R.id.suggestionNameTextView);
+			TextView suggestionProgramTextView = (TextView) card.findViewById(R.id.suggestionProgramTextView);
+			TextView suggestionYearTextView = (TextView) card.findViewById(R.id.suggestionYearTextView);
+			TextView suggestionBioTextView = (TextView) card.findViewById(R.id.suggestionBioTextView);
+			ImageView suggestionPhotoImageView = (ImageView) card.findViewById(R.id.suggestionPhotoImageView);
+
+			Suggestion suggestion = contents.get(position);
+
+			suggestionNameTextView.setText(suggestion.getName());
+			suggestionProgramTextView.setText(suggestion.getProgram());
+			suggestionYearTextView.setText("Year " + suggestion.getYear());
+			suggestionBioTextView.setText(suggestion.getBio());
+			//TODO photo
+			//suggestionPhotoImageView.setImageDrawable(suggestion.getPhoto().getDrawable(getContext()));
+			return card;
+		}
 
 	}
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View card = inflater.inflate(R.layout.suggestion_card_view, parent, false);
-
-		TextView suggestionNameTextView = (TextView) card.findViewById(R.id.suggestionNameTextView);
-		TextView suggestionProgramTextView = (TextView) card.findViewById(R.id.suggestionProgramTextView);
-		TextView suggestionYearTextView = (TextView) card.findViewById(R.id.suggestionYearTextView);
-		TextView suggestionBioTextView = (TextView) card.findViewById(R.id.suggestionBioTextView);
-		ImageView suggestionPhotoImageView = (ImageView) card.findViewById(R.id.suggestionPhotoImageView);
-
-		Suggestion suggestion = contents.get(position);
-
-		suggestionNameTextView.setText(suggestion.getName());
-		suggestionProgramTextView.setText(suggestion.getProgram());
-		suggestionYearTextView.setText("Year " + suggestion.getYear());
-		suggestionBioTextView.setText(suggestion.getBio());
-		// TODO photos
-		//suggestionPhotoImageView.setImageDrawable(suggestion.getPhoto().getDrawable(getContext()));
-
-		return card;
-	}
-
 }
-
 
