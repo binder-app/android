@@ -1,12 +1,11 @@
 package ca.binder;
 
 import android.app.Activity;
-import android.content.ContentValues;
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.hardware.camera2.CaptureRequest;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -22,18 +21,21 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import ca.binder.android.DeviceInfo;
+import ca.binder.domain.Profile;
+import ca.binder.remote.Server;
+import ca.binder.remote.request.UpdateProfileRequest;
+
 /**
  * Created by SheldonCOMP4980 on 11/5/2015.
  */
 public class FirstLaunchActivity extends Activity {
 
     final String LOG_HEADER = "MYLOG###";
-
-    ImageView uploadImageView;
-    private Uri photopath;
     private final int IMAGE_CAPTURE_REQUEST_CODE = 9999;
-
+    ImageView uploadImageView;
     File photo;
+    private Uri photopath;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +82,7 @@ public class FirstLaunchActivity extends Activity {
                 File file = new File(Environment.getExternalStorageDirectory(), "okokok.jpg");
                 photopath = Uri.fromFile(file);
                 Log.v(LOG_HEADER, photopath.toString());
-                if(photopath != null){
+                if (photopath != null) {
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, photopath);
                 }
                 startActivityForResult(intent, IMAGE_CAPTURE_REQUEST_CODE);
@@ -111,19 +113,10 @@ public class FirstLaunchActivity extends Activity {
      * @param v - The Button View that was pressed to call this method
      */
     public void onFinishSetup(View v) {
-        //TODO: Define methods: validateForms, createProfile
-        //TODO: Only finish() if above methods return true
-//        if(validateForms()) {
-//            if(createProfile()) {
-//                //finish
-//            }
-//        }
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra("finished", true);
-        setResult(Activity.RESULT_OK, returnIntent);
-        finish();
+        if (validateForms()) {
+            createProfile();
+        }
     }
-
 
     /**
      * Check each form to ensure data meets requirements
@@ -132,13 +125,14 @@ public class FirstLaunchActivity extends Activity {
     private boolean validateForms() {
         EditText checkText;
 
+        // TODO disabled while photos are WIP
         //Check photo
-        if(photo == null){
-            Toast toast = Toast.makeText(getApplicationContext(),
-                    "A picture must be taken!", Toast.LENGTH_SHORT);
-            toast.show();
-            return false;
-        }
+//        if(photo == null){
+//            Toast toast = Toast.makeText(getApplicationContext(),
+//                    "A picture must be taken!", Toast.LENGTH_SHORT);
+//            toast.show();
+//            return false;
+//        }
 
         //Check name
         checkText = (EditText)findViewById(R.id.name_input);
@@ -179,14 +173,114 @@ public class FirstLaunchActivity extends Activity {
         return true;
     }
 
+    /**
+     * Creates Profile object using form data, begins API request
+     */
+    private void createProfile() {
 
-    private boolean createProfile() {
+        EditText text;
+        Profile profile = new Profile(DeviceInfo.deviceId(this));
 
-        return false;
+        // name
+        text = (EditText) findViewById(R.id.name_input);
+        profile.setName(text.getText().toString());
+
+        // phone
+        text = (EditText) findViewById(R.id.phone_no_input);
+        profile.setPhone(text.getText().toString());
+
+        // program
+        text = (EditText) findViewById(R.id.degree_input);
+        profile.setProgram(text.getText().toString());
+
+        // year
+        Spinner spinner = (Spinner) findViewById(R.id.year_input);
+        int year = Integer.parseInt(spinner.getSelectedItem().toString().substring(0, 1));
+        profile.setYear(year);
+
+        // course list
+        text = (EditText) findViewById(R.id.class_list);
+        // TODO decide how we want to parse the class list?
+        //profile.addCourse();
+
+        // photo
+        // TODO add photo taken to profile
+
+        // bio
+        text = (EditText) findViewById(R.id.user_bio);
+        profile.setBio(text.getText().toString());
+
+        new CreateProfileTask().execute(profile);
+    }
+
+
+    private void onProfileCreateFailure() {
+        Log.e("CreateProfileTask", "Profile creation failed.");
+        // TODO handle profile creation failure
+    }
+
+    private void onProfileCreateSuccess() {
+        Log.d("CreateProfileTask", "Profile created successfully!");
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("finished", true);
+        setResult(Activity.RESULT_OK, returnIntent);
+        finish();
     }
 
     //Ensure back does not navigate away from profile creation page
     @Override
     public void onBackPressed() {
+    }
+
+    /**
+     * Asynchronously performs profile creation request.
+     *
+     * @author stevelyall
+     */
+    class CreateProfileTask extends AsyncTask<Profile, Void, Boolean> {
+
+        private final ProgressDialog dialog = new ProgressDialog(FirstLaunchActivity.this);
+
+        /**
+         * Show progress dialog
+         */
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            this.dialog.setMessage("Creating Profile...");
+            this.dialog.show();
+        }
+
+        /**
+         * Handle result of profile creation
+         *
+         * @param success true if the profile was created successfully, false otherwise
+         */
+        @Override
+        protected void onPostExecute(Boolean success) {
+            if (success) {
+                onProfileCreateSuccess();
+            } else {
+                onProfileCreateFailure();
+            }
+            this.dialog.dismiss();
+        }
+
+        /**
+         * Performs update profile request
+         *
+         * @param profiles first index is profile to be added
+         * @return true if the profile was created successfully, false otherwise
+         */
+        @Override
+        protected Boolean doInBackground(Profile... profiles) {
+            Log.d("CreateProfileTask", "Doing...");
+            Server server = new Server(Server.API_LOCATION, DeviceInfo.deviceId(getBaseContext()));
+            Log.i("DeviceId", DeviceInfo.deviceId(getBaseContext()));
+            return new UpdateProfileRequest(profiles[0]).request(server);
+
+        }
+
+
     }
 }

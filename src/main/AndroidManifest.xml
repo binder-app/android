@@ -14,7 +14,8 @@
         android:theme="@android:style/Theme.DeviceDefault.Light.NoActionBar.Fullscreen">
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -22,13 +23,18 @@
             </intent-filter>
         </activity>
         <activity android:name=".FirstLaunchActivity"
-                  android:label="FirstLaunchActivity">
+                  android:label="FirstLaunchActivity"
+                  android:screenOrientation="portrait">
 
         </activity>
         <activity
             android:name=".SuggestionViewActivity"
             android:screenOrientation="portrait">
+            <!--<intent-filter>-->
+            <!--<action android:name="android.intent.action.MAIN"/>-->
 
+            <!--<category android:name="android.intent.category.LAUNCHER"/>-->
+            <!--</intent-filter>-->
         </activity>
     </application>
 
