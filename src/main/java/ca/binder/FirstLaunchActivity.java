@@ -42,7 +42,7 @@ public class FirstLaunchActivity extends Activity {
         setContentView(R.layout.first_launch_activity_layout);
 
         uploadImageView = (ImageView)findViewById(R.id.add_user_image);
-        uploadImageView.setImageDrawable(getDrawable(R.drawable.add_user));
+        uploadImageView.setImageDrawable(getResources().getDrawable(R.drawable.add_user));
         setupOnClickListenerForImage();
 
         fillYearSpinner();
