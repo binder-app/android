@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
@@ -35,30 +36,39 @@ public class SuggestionViewActivity extends Activity {
 
 	@Bind(R.id.swipe_view_card_container)
 	SwipeFlingAdapterView flingContainer;
-
+	TextView noSuggestionsTextView;
+	ViewSwitcher viewSwitcher;
 	private SuggestionAdapter adapter;
 	private List<Suggestion> suggestionsToShow;
+
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_suggestion_view);
 		ButterKnife.bind(this);
+
+		viewSwitcher = (ViewSwitcher) findViewById(R.id.suggestionViewSwitcher);
+		noSuggestionsTextView = (TextView) findViewById(R.id.noSuggestionsTextView);
+
 		suggestionsToShow = new ArrayList<>();
 
 		adapter = new SuggestionAdapter(this, R.layout.suggestion_card_view, suggestionsToShow);
 		flingContainer.setAdapter(adapter);
 
-		//createTestSuggestions();
+		createTestSuggestions();
 
 		// get suggestions from api asynchronously
-		GetSuggestionsTask task = new GetSuggestionsTask();
-		task.execute(this);
+		//GetSuggestionsTask task = new GetSuggestionsTask();
+		//task.execute(this);
 
-		Log.d(LOG_TAG, "Suggestions: " + suggestionsToShow.size());
+		Log.d(LOG_TAG, "# of suggestions: " + suggestionsToShow.size());
 
 
 		adapter.notifyDataSetChanged();
+		checkForEmptySuggestionList(adapter.getCount());
+
 
 		/**
 		 * Listener for swipe events
@@ -99,7 +109,8 @@ public class SuggestionViewActivity extends Activity {
 
 			@Override
 			public void onAdapterAboutToEmpty(int itemsInAdapter) {
-				// TODO
+				Log.d(LOG_TAG, "Adapter about to empty.." + itemsInAdapter + "items");
+				checkForEmptySuggestionList(itemsInAdapter);
 			}
 
 			@Override
@@ -117,6 +128,20 @@ public class SuggestionViewActivity extends Activity {
 			}
 		});
 
+	}
+
+	/**
+	 * Determines whether the list of suggestions is empty, and pages the ViewSwitcher to show the empty message if so.
+	 * @param numItems the number of items in the adapter
+	 */
+	private void checkForEmptySuggestionList(int numItems) {
+		if (numItems == 0) {
+			Log.d("Suggestions empty?", "empty");
+			viewSwitcher.showNext();
+
+		} else {
+			Log.d("Suggestions empty?", "not empty");
+		}
 	}
 
 	private void createTestSuggestions() {
