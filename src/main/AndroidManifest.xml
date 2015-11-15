@@ -25,7 +25,9 @@
                   android:label="FirstLaunchActivity">
 
         </activity>
-        <activity android:name=".SuggestionViewActivity">
+        <activity
+            android:name=".SuggestionViewActivity"
+            android:screenOrientation="portrait">
 
         </activity>
     </application>
