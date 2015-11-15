@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 /**
  * Created by SheldonCOMP4980 on 11/5/2015.
@@ -32,10 +31,16 @@ public class MainActivity extends Activity {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         boolean previouslyStarted = sharedPreferences.getBoolean(getString(R.string.previously_started), false);
 
-        //if(!previouslyStarted){
+        if (!previouslyStarted) {
+            // first launch / profile creation
             Intent intent = new Intent(this, FirstLaunchActivity.class);
             startActivityForResult(intent, FIRST_LAUNCH_REQUEST);
-        //}
+        } else {
+            // start viewing suggestions
+            startActivity(new Intent(this, SuggestionViewActivity.class));
+            finish();
+        }
+
     }
 
     /**
@@ -53,6 +58,9 @@ public class MainActivity extends Activity {
             //Update PREVIOUSLY_STARTED field in SharedPrefs, FirstLaunchActivity should not start anymore
             edit.putBoolean(getString(R.string.previously_started), data.getBooleanExtra("finished", false));
             edit.commit();
+            Intent intent = new Intent(this, SuggestionViewActivity.class);
+            startActivity(intent);
+            finish();
         }
     }
 
