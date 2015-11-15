@@ -19,20 +19,19 @@ public class Server {
     private final String apiLocation;
     private final String bearer;
 
-    public static Server standard(String bearer) {
-        return new Server(API_LOCATION, bearer);
-    }
-
     public Server(String apiLocation, String bearer) {
         this.apiLocation = apiLocation;
         this.bearer = bearer;
         this.client = new OkHttpClient();
     }
 
+    public static Server standard(String bearer) {
+        return new Server(API_LOCATION, bearer);
+    }
+
     public Request.Builder request(String endpoint) {
         return new Request.Builder()
-                .url(apiLocation + endpoint)
-                .header("Authorization", "Bearer: " + bearer)
+                .url(apiLocation + endpoint).header("Authorization", "Bearer " + bearer)
                 .header("Content-Type", "application/json");
     }
 

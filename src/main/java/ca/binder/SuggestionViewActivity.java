@@ -5,6 +5,7 @@
 package ca.binder;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -23,7 +24,8 @@ import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.*;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import ca.binder.android.DeviceInfo;
 import ca.binder.domain.Suggestion;
 import ca.binder.remote.Server;
@@ -36,12 +38,10 @@ public class SuggestionViewActivity extends Activity {
 
 	@Bind(R.id.swipe_view_card_container)
 	SwipeFlingAdapterView flingContainer;
-	TextView noSuggestionsTextView;
 	ViewSwitcher viewSwitcher;
+
 	private SuggestionAdapter adapter;
 	private List<Suggestion> suggestionsToShow;
-
-
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,24 +50,15 @@ public class SuggestionViewActivity extends Activity {
 		ButterKnife.bind(this);
 
 		viewSwitcher = (ViewSwitcher) findViewById(R.id.suggestionViewSwitcher);
-		noSuggestionsTextView = (TextView) findViewById(R.id.noSuggestionsTextView);
 
 		suggestionsToShow = new ArrayList<>();
 
-		adapter = new SuggestionAdapter(this, R.layout.suggestion_card_view, suggestionsToShow);
-		flingContainer.setAdapter(adapter);
 
-		createTestSuggestions();
+		//createTestSuggestions();
 
 		// get suggestions from api asynchronously
-		//GetSuggestionsTask task = new GetSuggestionsTask();
-		//task.execute(this);
-
-		Log.d(LOG_TAG, "# of suggestions: " + suggestionsToShow.size());
-
-
-		adapter.notifyDataSetChanged();
-		checkForEmptySuggestionList(adapter.getCount());
+		GetSuggestionsTask task = new GetSuggestionsTask();
+		task.execute(this);
 
 
 		/**
@@ -124,7 +115,7 @@ public class SuggestionViewActivity extends Activity {
 		flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClicked(int itemPosition, Object dataObject) {
-				Log.i(LOG_TAG, "Item " + itemPosition + " clicked!");
+				Log.i(LOG_TAG, "Suggestion " + itemPosition + " clicked! Id:" + adapter.contents.get(itemPosition).getId());
 			}
 		});
 
@@ -141,6 +132,7 @@ public class SuggestionViewActivity extends Activity {
 
 		} else {
 			Log.d("Suggestions empty?", "not empty");
+			//viewSwitcher.showPrevious();
 		}
 	}
 
@@ -151,29 +143,51 @@ public class SuggestionViewActivity extends Activity {
 	}
 
 	/**
-	 * Asynchronously performs GetSuggestions request, update list of suggestions
+	 * Asynchronously performs GetSuggestions request.
 	 */
 	class GetSuggestionsTask extends AsyncTask<Context, Void, List<Suggestion>> {
 
+		private final ProgressDialog dialog = new ProgressDialog(SuggestionViewActivity.this);
+
+		/**
+		 * Show progress dialog
+		 */
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
+			this.dialog.setMessage("Loading...");
+			this.dialog.show();
 		}
 
+		/**
+		 * Update suggestions collection, set up adapter and clear dialog.
+		 * If no suggestions, show message.
+		 * @param suggestions list of suggestions from server
+		 */
 		@Override
 		protected void onPostExecute(List<Suggestion> suggestions) {
 			suggestionsToShow = suggestions;
 			Log.d("GetSuggestionsTask", "Done!");
-			Log.d("GetSuggestionsTask", "Suggestions: " + suggestionsToShow.size());
+			Log.d("GetSuggestionsTask", "# of suggestions: " + suggestionsToShow.size());
+
+
+			adapter = new SuggestionAdapter(SuggestionViewActivity.this, R.layout.suggestion_card_view, suggestionsToShow);
+			flingContainer.setAdapter(adapter);
 			adapter.notifyDataSetChanged();
-
-
+			this.dialog.dismiss();
+			checkForEmptySuggestionList(adapter.getCount());
 		}
 
+		/**
+		 * Retrieves a list of suggestions from the server
+		 * @param context context
+		 * @return a Suggestion list
+		 */
 		@Override
 		protected List<Suggestion> doInBackground(Context... context) {
 			Log.d("GetSuggestionsTask", "Doing...");
 			Server server = new Server(Server.API_LOCATION, DeviceInfo.deviceId(context[0]));
+			Log.i("DeviceId", DeviceInfo.deviceId(context[0]));
 			suggestionsToShow = new GetSuggestionsRequest().request(server);
 
 			return suggestionsToShow;
