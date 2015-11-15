@@ -44,7 +44,7 @@ class SuggestionAdapter extends ArrayAdapter<Suggestion> {
 
 		suggestionNameTextView.setText(suggestion.getName());
 		suggestionProgramTextView.setText(suggestion.getProgram());
-		suggestionYearTextView.setText("Year " + suggestion.getYear());
+		suggestionYearTextView.setText(suggestion.getYear());
 		suggestionBioTextView.setText(suggestion.getBio());
 		//TODO photo
 		//suggestionPhotoImageView.setImageDrawable(suggestion.getPhoto().getDrawable(getContext()));

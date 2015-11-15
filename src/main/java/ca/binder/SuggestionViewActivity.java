@@ -132,8 +132,8 @@ public class SuggestionViewActivity extends Activity {
 	}
 
 	private void createTestSuggestions() {
-		suggestionsToShow.add(new Suggestion("1234", "Jeff", "Computing Science", "I am a Jeff", 4, null));
-		suggestionsToShow.add(new Suggestion("1235", "Also Jeff", "Business Administration", "I am another Jeff", 4, null));
+		suggestionsToShow.add(new Suggestion("1234", "Jeff", "Computing Science", "I am a Jeff", "Year 4", null));
+		suggestionsToShow.add(new Suggestion("1235", "Also Jeff", "Business Administration", "I am another Jeff", "Year 3", null));
 
 	}
 

@@ -8,8 +8,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 import ca.binder.domain.Profile;
-import ca.binder.remote.binding.ProfileBinding;
 import ca.binder.remote.Server;
+import ca.binder.remote.binding.ProfileBinding;
 
 /**
  * @author Mitchell Hentges
@@ -33,7 +33,7 @@ public class UpdateProfileRequest implements IServerRequest<Boolean> {
                     .build();
             return server.execute(request).code() == 200;
         } catch (IOException e) {
-            return null;
+            return false;
         }
     }
 }

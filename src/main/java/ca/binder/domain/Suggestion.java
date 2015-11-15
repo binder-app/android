@@ -11,10 +11,10 @@ public class Suggestion {
     private final String name;
     private final String program;
     private final String bio;
-    private final int year;
+    private final String year;
     private final IPhoto photo;
 
-    public Suggestion(String id, String name, String program, String bio, int year, IPhoto photo) {
+    public Suggestion(String id, String name, String program, String bio, String year, IPhoto photo) {
         this.id = id;
         this.name = name;
         this.program = program;
@@ -39,7 +39,7 @@ public class Suggestion {
         return bio;
     }
 
-    public int getYear() {
+    public String getYear() {
         return year;
     }
 

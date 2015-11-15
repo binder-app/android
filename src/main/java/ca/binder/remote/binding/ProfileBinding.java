@@ -6,7 +6,6 @@ import org.json.JSONObject;
 
 import ca.binder.domain.Course;
 import ca.binder.domain.Profile;
-import ca.binder.remote.binding.ModelToJsonBinding;
 
 /**
  * @author Mitchell Hentges
@@ -19,6 +18,9 @@ public class ProfileBinding implements ModelToJsonBinding<Profile> {
         try {
             json.put("name", object.getName());
             json.put("bio", object.getBio());
+            json.put("program", object.getProgram());
+            json.put("phone", object.getPhone());
+            json.put("year", object.getYear());
             JSONArray courseArray = new JSONArray();
             for (Course course : object.getCourses()) {
                 courseArray.put(course.getName());
