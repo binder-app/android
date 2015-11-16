@@ -19,17 +19,14 @@ import ca.binder.domain.IPhoto;
  */
 public class InternalPhoto implements IPhoto {
 
-    private final File file;
-    private final Context context;
+    private final Bitmap bitmap;
 
-    public InternalPhoto(File file, Context context) {
-        this.file = file;
-        this.context = context;
+    public InternalPhoto(Bitmap bitmap) {
+        this.bitmap = bitmap;
     }
 
     @Override
     public Drawable getDrawable(Context context) {
-        Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-        return new BitmapDrawable(this.context.getResources(), bitmap);
+        return new BitmapDrawable(context.getResources(), bitmap);
     }
 }

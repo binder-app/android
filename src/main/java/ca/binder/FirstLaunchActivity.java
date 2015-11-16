@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.binder.android.DeviceInfo;
+import ca.binder.android.InternalPhoto;
 import ca.binder.domain.Profile;
 import ca.binder.remote.Server;
 import ca.binder.remote.request.UpdateProfileRequest;
@@ -31,11 +32,9 @@ import ca.binder.remote.request.UpdateProfileRequest;
  */
 public class FirstLaunchActivity extends Activity {
 
-    final String LOG_HEADER = "MYLOG###";
-    private final int IMAGE_CAPTURE_REQUEST_CODE = 9999;
-    ImageView uploadImageView;
-    File photo;
-    private Uri photopath;
+    private final int IMAGE_CAPTURE_REQUEST_CODE = 1;
+    private ImageView uploadImageView;
+    private boolean photoTaken = false;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,9 +42,15 @@ public class FirstLaunchActivity extends Activity {
 
         uploadImageView = (ImageView)findViewById(R.id.add_user_image);
         uploadImageView.setImageDrawable(getResources().getDrawable(R.drawable.add_user));
-        setupOnClickListenerForImage();
-
         fillYearSpinner();
+
+        uploadImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, IMAGE_CAPTURE_REQUEST_CODE);
+            }
+        });
     }
 
 
@@ -73,37 +78,14 @@ public class FirstLaunchActivity extends Activity {
     }
 
 
-    private void setupOnClickListenerForImage() {
-        uploadImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-                File file = new File(Environment.getExternalStorageDirectory(), "okokok.jpg");
-                photopath = Uri.fromFile(file);
-                Log.v(LOG_HEADER, photopath.toString());
-                if (photopath != null) {
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, photopath);
-                }
-                startActivityForResult(intent, IMAGE_CAPTURE_REQUEST_CODE);
-            }
-        });
-    }
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == IMAGE_CAPTURE_REQUEST_CODE) {
-            if(resultCode == RESULT_OK && data != null) {
-                photo = BinderUtilities.findImageFileFromUri(photopath, this);
+        if (requestCode == IMAGE_CAPTURE_REQUEST_CODE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            InternalPhoto photo = new InternalPhoto((Bitmap) extras.get("data"));
+            uploadImageView.setImageDrawable(photo.getDrawable(this));
 
-                Bitmap bitmap = BinderUtilities.convertFileToBitmap(photo);
-                uploadImageView.setImageBitmap(bitmap);
-                //TODO: Turn photo into image that uploadImageView can use
-            }
-            else {
-                Toast.makeText(this, "Photo was not taken", Toast.LENGTH_SHORT);
-            }
+            photoTaken = true;
         }
     }
 
@@ -224,11 +206,6 @@ public class FirstLaunchActivity extends Activity {
         returnIntent.putExtra("finished", true);
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
-    }
-
-    //Ensure back does not navigate away from profile creation page
-    @Override
-    public void onBackPressed() {
     }
 
     /**
