@@ -1,25 +1,25 @@
 package ca.binder;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.widget.*;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ca.binder.android.DeviceInfo;
 import ca.binder.android.InternalPhoto;
 import ca.binder.domain.Course;
-import ca.binder.domain.Profile;
 import ca.binder.domain.ProfileBuilder;
 import ca.binder.remote.Callback;
 import ca.binder.remote.Server;
@@ -156,7 +156,7 @@ public class FirstLaunchActivity extends Activity {
                     onProfileCreateFailure();
                 }
             }
-        });
+        }).run();
     }
 
     /**
@@ -177,6 +177,9 @@ public class FirstLaunchActivity extends Activity {
     }
 
     private String text(int inputId) {
+        if (inputId == R.id.year_input) {
+            return ((Spinner) findViewById(inputId)).getSelectedItem().toString();
+        }
         return ((EditText)(findViewById(inputId))).getText().toString();
     }
 
