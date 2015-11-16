@@ -4,27 +4,26 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Spinner;
-import android.widget.Toast;
+import android.widget.*;
 
-import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ca.binder.android.DeviceInfo;
 import ca.binder.android.InternalPhoto;
+import ca.binder.domain.Course;
 import ca.binder.domain.Profile;
+import ca.binder.domain.ProfileBuilder;
+import ca.binder.remote.Callback;
 import ca.binder.remote.Server;
+import ca.binder.remote.request.AsyncServerRequest;
 import ca.binder.remote.request.UpdateProfileRequest;
 
 /**
@@ -34,6 +33,7 @@ public class FirstLaunchActivity extends Activity {
 
     private final int IMAGE_CAPTURE_REQUEST_CODE = 1;
     private ImageView uploadImageView;
+    private InternalPhoto photo;
     private boolean photoTaken = false;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -82,7 +82,7 @@ public class FirstLaunchActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == IMAGE_CAPTURE_REQUEST_CODE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
-            InternalPhoto photo = new InternalPhoto((Bitmap) extras.get("data"));
+            photo = new InternalPhoto((Bitmap) extras.get("data"));
             uploadImageView.setImageDrawable(photo.getDrawable(this));
 
             photoTaken = true;
@@ -95,61 +95,33 @@ public class FirstLaunchActivity extends Activity {
      * @param v - The Button View that was pressed to call this method
      */
     public void onFinishSetup(View v) {
-        if (validateForms()) {
+        if (formValid()) {
             createProfile();
         }
     }
 
     /**
-     * Check each form to ensure data meets requirements
-     * @return
+     * Check each input in form to ensure data meets requirements
+     * @return true if form is valid and ready for submission
      */
-    private boolean validateForms() {
-        EditText checkText;
-
-        // TODO disabled while photos are WIP
-        //Check photo
-//        if(photo == null){
-//            Toast toast = Toast.makeText(getApplicationContext(),
-//                    "A picture must be taken!", Toast.LENGTH_SHORT);
-//            toast.show();
-//            return false;
-//        }
-
-        //Check name
-        checkText = (EditText)findViewById(R.id.name_input);
-        if(checkText.getText().length() == 0) {
+    private boolean formValid() {
+        if(!photoTaken){
             Toast toast = Toast.makeText(getApplicationContext(),
-                    "Name cannot be empty!", Toast.LENGTH_SHORT);
+                    "A profile picture must be taken!", Toast.LENGTH_SHORT);
             toast.show();
             return false;
         }
 
-        //Check phone number
-        checkText = (EditText)findViewById(R.id.phone_no_input);
-        if(checkText.getText().length() == 0) {
-            Toast toast = Toast.makeText(getApplicationContext(),
-                    "Phone Number cannot be empty!", Toast.LENGTH_SHORT);
-            toast.show();
-            return false;
-        }
+        Map<Integer, String> inputToError = new HashMap<>();
+        inputToError.put(R.id.name_input, "Name cannot be empty!");
+        inputToError.put(R.id.phone_no_input, "Phone Number cannot be empty!");
+        inputToError.put(R.id.program_input, "Degree Program cannot be empty!");
+        inputToError.put(R.id.course_list, "Class List cannot be empty!");
 
-        //Check degree
-        checkText = (EditText)findViewById(R.id.degree_input);
-        if(checkText.getText().length() == 0) {
-            Toast toast = Toast.makeText(getApplicationContext(),
-                    "Degree Program cannot be empty!", Toast.LENGTH_SHORT);
-            toast.show();
-            return false;
-        }
-
-        //Check class list
-        checkText = (EditText)findViewById(R.id.class_list);
-        if(checkText.getText().length() == 0) {
-            Toast toast = Toast.makeText(getApplicationContext(),
-                    "Class List cannot be empty!", Toast.LENGTH_SHORT);
-            toast.show();
-            return false;
+        for (Map.Entry<Integer, String> check : inputToError.entrySet()) {
+            if (failsValidation(check.getKey(), check.getValue())) {
+                return false;
+            }
         }
 
         return true;
@@ -160,38 +132,52 @@ public class FirstLaunchActivity extends Activity {
      */
     private void createProfile() {
 
-        EditText text;
-        Profile profile = new Profile(DeviceInfo.deviceId(this));
+        final ProfileBuilder builder = ProfileBuilder.start(this)
+                .name(text(R.id.name_input))
+                .phone(text(R.id.phone_no_input))
+                .program(text(R.id.program_input))
+                .year(text(R.id.year_input))
+                .name(text(R.id.name_input))
+                .bio(text(R.id.user_bio))
+                .photo(photo);
 
-        // name
-        text = (EditText) findViewById(R.id.name_input);
-        profile.setName(text.getText().toString());
+        for (String course : text(R.id.course_list).split("\n")) {
+            builder.course(new Course(course));
+        }
 
-        // phone
-        text = (EditText) findViewById(R.id.phone_no_input);
-        profile.setPhone(text.getText().toString());
+        Server server = Server.standard(this);
+        new AsyncServerRequest<>(server, new UpdateProfileRequest(builder.build()), new Callback<Boolean>() {
+            @Override
+            public void use(Boolean success) {
+                //Executed after request finishes
+                if (success) {
+                    onProfileCreateSuccess();
+                } else {
+                    onProfileCreateFailure();
+                }
+            }
+        });
+    }
 
-        // program
-        text = (EditText) findViewById(R.id.degree_input);
-        profile.setProgram(text.getText().toString());
+    /**
+     * Checks a textview to see if it is empty. If so, displays a brief {@link Toast}
+     * @param textView input to validate
+     * @param error string to show user if validation fails
+     * @return true if validation failed for input
+     */
+    private boolean failsValidation(int textView, String error) {
+        EditText toCheck = (EditText)findViewById(textView);
+        if(toCheck.getText().length() == 0) {
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    error, Toast.LENGTH_SHORT);
+            toast.show();
+            return true;
+        }
+        return false;
+    }
 
-        // year
-        Spinner spinner = (Spinner) findViewById(R.id.year_input);
-        profile.setYear(spinner.getSelectedItem().toString());
-
-        // course list
-        text = (EditText) findViewById(R.id.class_list);
-        // TODO decide how we want to parse the class list?
-        //profile.addCourse();
-
-        // photo
-        // TODO add photo taken to profile
-
-        // bio
-        text = (EditText) findViewById(R.id.user_bio);
-        profile.setBio(text.getText().toString());
-
-        new CreateProfileTask().execute(profile);
+    private String text(int inputId) {
+        return ((EditText)(findViewById(inputId))).getText().toString();
     }
 
 
@@ -206,57 +192,5 @@ public class FirstLaunchActivity extends Activity {
         returnIntent.putExtra("finished", true);
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
-    }
-
-    /**
-     * Asynchronously performs profile creation request.
-     *
-     * @author stevelyall
-     */
-    class CreateProfileTask extends AsyncTask<Profile, Void, Boolean> {
-
-        private final ProgressDialog dialog = new ProgressDialog(FirstLaunchActivity.this);
-
-        /**
-         * Show progress dialog
-         */
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            this.dialog.setMessage("Creating Profile...");
-            this.dialog.show();
-        }
-
-        /**
-         * Handle result of profile creation
-         *
-         * @param success true if the profile was created successfully, false otherwise
-         */
-        @Override
-        protected void onPostExecute(Boolean success) {
-            if (success) {
-                onProfileCreateSuccess();
-            } else {
-                onProfileCreateFailure();
-            }
-            this.dialog.dismiss();
-        }
-
-        /**
-         * Performs update profile request
-         *
-         * @param profiles first index is profile to be added
-         * @return true if the profile was created successfully, false otherwise
-         */
-        @Override
-        protected Boolean doInBackground(Profile... profiles) {
-            Log.d("CreateProfileTask", "Doing...");
-            Server server = new Server(Server.API_LOCATION, DeviceInfo.deviceId(getBaseContext()));
-            Log.i("DeviceId", DeviceInfo.deviceId(getBaseContext()));
-            return new UpdateProfileRequest(profiles[0]).request(server);
-
-        }
-
-
     }
 }

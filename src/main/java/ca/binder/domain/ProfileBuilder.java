@@ -3,6 +3,7 @@ package ca.binder.domain;
 import android.content.Context;
 
 import ca.binder.android.DeviceInfo;
+import ca.binder.android.InternalPhoto;
 
 /**
  * @author Mitchell Hentges
@@ -47,6 +48,11 @@ public class ProfileBuilder {
 
     public ProfileBuilder year(String year) {
         profile.setYear(year);
+        return this;
+    }
+
+    public ProfileBuilder photo(InternalPhoto photo) {
+        profile.setPhoto(photo);
         return this;
     }
 

@@ -71,6 +71,10 @@ public class Profile {
         return photo;
     }
 
+    public void setPhoto(InternalPhoto photo) {
+        this.photo = photo;
+    }
+
     public List<Course> getCourses() {
         return courses;
     }
@@ -82,6 +86,4 @@ public class Profile {
     public void removeCourse(Course course) {
         courses.remove(course);
     }
-
-    //todo setting photo
 }
