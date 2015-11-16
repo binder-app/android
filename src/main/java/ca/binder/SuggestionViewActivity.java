@@ -54,7 +54,7 @@ public class SuggestionViewActivity extends Activity {
 
 		// get suggestions from api asynchronously
 		Server server = Server.standard(this);
-		new AsyncServerRequest<>(server, new GetSuggestionsRequest(), new Callback<List<Suggestion>>() {
+		new AsyncServerRequest<>(this, server, new GetSuggestionsRequest(), new Callback<List<Suggestion>>() {
 			@Override
 			public void use(List<Suggestion> suggestions) {
 				//Executed after request finishes
@@ -92,7 +92,7 @@ public class SuggestionViewActivity extends Activity {
 				final Suggestion suggestion = (Suggestion) dataObject;
 
 				Server server = Server.standard(SuggestionViewActivity.this);
-				new AsyncServerRequest<>(server, new DislikeSuggestionRequest(suggestion.getId()), new Callback<Boolean>() {
+				new AsyncServerRequest<>(SuggestionViewActivity.this, server, new DislikeSuggestionRequest(suggestion.getId()), new Callback<Boolean>() {
 					@Override
 					public void use(Boolean success) {
 						//Executed after request finishes
@@ -118,7 +118,7 @@ public class SuggestionViewActivity extends Activity {
 				final Suggestion suggestion = (Suggestion) dataObject;
 
 				Server server = Server.standard(SuggestionViewActivity.this);
-				new AsyncServerRequest<>(server, new LikeSuggestionRequest(suggestion.getId()), new Callback<Boolean>() {
+				new AsyncServerRequest<>(SuggestionViewActivity.this, server, new LikeSuggestionRequest(suggestion.getId()), new Callback<Boolean>() {
 					@Override
 					public void use(Boolean success) {
 						//Executed after request finishes

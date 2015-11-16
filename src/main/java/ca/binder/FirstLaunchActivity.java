@@ -146,7 +146,7 @@ public class FirstLaunchActivity extends Activity {
         }
 
         Server server = Server.standard(this);
-        new AsyncServerRequest<>(server, new UpdateProfileRequest(builder.build()), new Callback<Boolean>() {
+        new AsyncServerRequest<>(this, server, new UpdateProfileRequest(builder.build()), new Callback<Boolean>() {
             @Override
             public void use(Boolean success) {
                 //Executed after request finishes

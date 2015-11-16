@@ -1,5 +1,6 @@
 package ca.binder.remote.request;
 
+import android.app.Activity;
 import ca.binder.remote.Callback;
 import ca.binder.remote.Server;
 
@@ -8,11 +9,13 @@ import ca.binder.remote.Server;
  */
 public class AsyncServerRequest<T> {
 
+    private final Activity activity;
     private final Server server;
     private final IServerRequest<T> request;
     private final Callback<T> callback;
 
-    public AsyncServerRequest(Server server, IServerRequest<T> request, Callback<T> callback) {
+    public AsyncServerRequest(Activity activity, Server server, IServerRequest<T> request, Callback<T> callback) {
+        this.activity = activity;
         this.server = server;
         this.request = request;
         this.callback = callback;
@@ -22,7 +25,13 @@ public class AsyncServerRequest<T> {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                callback.use(request.request(server));
+                final T obj = request.request(server);
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.use(obj);
+                    }
+                });
             }
         }).start();
     }
