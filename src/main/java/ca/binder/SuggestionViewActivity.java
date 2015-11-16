@@ -22,7 +22,9 @@ import butterknife.ButterKnife;
 import ca.binder.android.DeviceInfo;
 import ca.binder.domain.Suggestion;
 import ca.binder.domain.SuggestionReaction;
+import ca.binder.remote.Callback;
 import ca.binder.remote.Server;
+import ca.binder.remote.request.AsyncServerRequest;
 import ca.binder.remote.request.DislikeSuggestionRequest;
 import ca.binder.remote.request.GetSuggestionsRequest;
 import ca.binder.remote.request.LikeSuggestionRequest;
@@ -31,6 +33,7 @@ import ca.binder.remote.request.LikeSuggestionRequest;
 public class SuggestionViewActivity extends Activity {
 
 	private final String LOG_TAG = "SwipeViewAcitivity";
+	private ProgressDialog dialog;
 
 	@Bind(R.id.swipe_view_card_container)
 	SwipeFlingAdapterView flingContainer;
@@ -46,15 +49,29 @@ public class SuggestionViewActivity extends Activity {
 		ButterKnife.bind(this);
 
 		viewSwitcher = (ViewSwitcher) findViewById(R.id.suggestionViewSwitcher);
-
+		dialog = new ProgressDialog(SuggestionViewActivity.this);
 		suggestionsToShow = new ArrayList<>();
 
 
 		//createTestSuggestions();
 
 		// get suggestions from api asynchronously
-		GetSuggestionsTask task = new GetSuggestionsTask();
-		task.execute(this);
+//		GetSuggestionsTask task = new GetSuggestionsTask();
+//		task.execute(this);
+		Server server = Server.standard(this);
+		new AsyncServerRequest<>(server, new GetSuggestionsRequest(), new Callback<List<Suggestion>>() {
+			@Override
+			public void use(List<Suggestion> suggestions) {
+				//Executed after request finishes
+				if (suggestions != null) {
+					onGetSuggestionsSuccess(suggestions);
+				} else {
+					onGetSuggestionsFailure();
+				}
+			}
+		});
+		this.dialog.setMessage("Loading...");
+		this.dialog.show();
 
 
 		/**
@@ -114,6 +131,26 @@ public class SuggestionViewActivity extends Activity {
 			}
 		});
 
+	}
+
+	private void onGetSuggestionsFailure() {
+		// TODO
+		Log.e("GetSuggestions", "Failed");
+		dialog.dismiss();
+	}
+
+	private void onGetSuggestionsSuccess(List<Suggestion> suggestions) {
+		// TODO
+		suggestionsToShow = suggestions;
+		Log.d("GetSuggestions", "Done!");
+		Log.d("GetSuggestions", "# of suggestions: " + suggestionsToShow.size());
+
+
+		adapter = new SuggestionAdapter(SuggestionViewActivity.this, R.layout.suggestion_card_view, suggestionsToShow);
+		flingContainer.setAdapter(adapter);
+		adapter.notifyDataSetChanged();
+		checkForEmptySuggestionList(adapter.getCount());
+		dialog.dismiss();
 	}
 
 	/**
