@@ -45,7 +45,7 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/degree_input"
+            android:id="@+id/program_input"
             android:hint="Degree Program"
             android:layout_weight="1.04"
             android:lines="1"
@@ -62,7 +62,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/class_list"
+        android:id="@+id/course_list"
         android:inputType="textMultiLine"
         android:lines="4"
         android:hint="Class List\nXMPL 1100\nXMPL 1650"

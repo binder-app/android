@@ -1,5 +1,7 @@
 package ca.binder.remote;
 
+import android.content.Context;
+import ca.binder.android.DeviceInfo;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -25,8 +27,8 @@ public class Server {
         this.client = new OkHttpClient();
     }
 
-    public static Server standard(String bearer) {
-        return new Server(API_LOCATION, bearer);
+    public static Server standard(Context context) {
+        return new Server(API_LOCATION, DeviceInfo.deviceId(context));
     }
 
     public Request.Builder request(String endpoint) {

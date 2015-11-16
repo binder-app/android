@@ -181,7 +181,7 @@ public class SuggestionViewActivity extends Activity {
 		@Override
 		protected List<Suggestion> doInBackground(Context... context) {
 			Log.d("GetSuggestionsTask", "Doing...");
-			Server server = new Server(Server.API_LOCATION, DeviceInfo.deviceId(context[0]));
+			Server server = Server.standard(context[0]);
 			Log.i("DeviceId", DeviceInfo.deviceId(context[0]));
 			suggestionsToShow = new GetSuggestionsRequest().request(server);
 
@@ -215,7 +215,7 @@ public class SuggestionViewActivity extends Activity {
 		@Override
 		protected SuggestionReactionTaskParameter doInBackground(SuggestionReactionTaskParameter... param) {
 			Log.d("suggestionReactionTask", "Doing...");
-			Server server = new Server(Server.API_LOCATION, DeviceInfo.deviceId(param[0].context));
+			Server server = Server.standard(param[0].context);
 			Log.i("DeviceId", DeviceInfo.deviceId(param[0].context));
 
 			if (param[0].reaction == SuggestionReaction.LIKE) {
