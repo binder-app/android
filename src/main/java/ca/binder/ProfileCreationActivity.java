@@ -29,7 +29,7 @@ import ca.binder.remote.request.UpdateProfileRequest;
 /**
  * Created by SheldonCOMP4980 on 11/5/2015.
  */
-public class FirstLaunchActivity extends Activity {
+public class ProfileCreationActivity extends Activity {
 
     private final int IMAGE_CAPTURE_REQUEST_CODE = 1;
     private ImageView uploadImageView;
@@ -38,7 +38,7 @@ public class FirstLaunchActivity extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.first_launch_activity_layout);
+        setContentView(R.layout.profile_creation_activity_layout);
 
         uploadImageView = (ImageView)findViewById(R.id.add_user_image);
         uploadImageView.setImageDrawable(getResources().getDrawable(R.drawable.add_user));
