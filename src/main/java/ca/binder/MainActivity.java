@@ -27,13 +27,13 @@ public class MainActivity extends Activity {
      */
     private void maybeLaunchFirstLaunchLaunch() {
 
-        //Check to see if the FirstLaunchActivity has ever completed
+        //Check to see if the ProfileCreationActivity has ever completed
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         boolean previouslyStarted = sharedPreferences.getBoolean(getString(R.string.previously_started), false);
 
         if (!previouslyStarted) {
             // first launch / profile creation
-            Intent intent = new Intent(this, FirstLaunchActivity.class);
+            Intent intent = new Intent(this, ProfileCreationActivity.class);
             startActivityForResult(intent, FIRST_LAUNCH_REQUEST);
         } else {
             // start viewing suggestions
@@ -51,11 +51,11 @@ public class MainActivity extends Activity {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == FIRST_LAUNCH_REQUEST && data != null){   //Handle FirstLaunchActivity result
+        if(requestCode == FIRST_LAUNCH_REQUEST && data != null){   //Handle ProfileCreationActivity result
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
             SharedPreferences.Editor edit = sharedPreferences.edit();
 
-            //Update PREVIOUSLY_STARTED field in SharedPrefs, FirstLaunchActivity should not start anymore
+            //Update PREVIOUSLY_STARTED field in SharedPrefs, ProfileCreationActivity should not start anymore
             edit.putBoolean(getString(R.string.previously_started), data.getBooleanExtra("finished", false));
             edit.commit();
             Intent intent = new Intent(this, SuggestionViewActivity.class);
