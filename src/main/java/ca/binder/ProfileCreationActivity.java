@@ -1,6 +1,10 @@
 package ca.binder;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -35,6 +39,7 @@ public class ProfileCreationActivity extends Activity {
     private ImageView uploadImageView;
     private InternalPhoto photo;
     private boolean photoTaken = false;
+    private Dialog currentDialog;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -185,8 +190,16 @@ public class ProfileCreationActivity extends Activity {
 
 
     private void onProfileCreateFailure() {
-        Log.e("CreateProfileTask", "Profile creation failed.");
-        // TODO handle profile creation failure
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        currentDialog = builder.setMessage("Couldn't save profile. Are you connected to the Internet?")
+                .setCancelable(false)
+                .setPositiveButton("Let me check", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        currentDialog.cancel();
+                    }
+                })
+                .create();
+        currentDialog.show();
     }
 
     private void onProfileCreateSuccess() {
