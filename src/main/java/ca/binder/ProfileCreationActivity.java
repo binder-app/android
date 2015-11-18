@@ -172,7 +172,7 @@ public class ProfileCreationActivity extends Activity {
      * Checks a textview to see if it is empty. If so, displays a brief {@link Toast}
      * @param textView input to validate
      * @param error string to show user if validation fails
-     * @return true if validation failed for input
+     * @return true if validation failed for input mfw
      */
     private boolean failsValidation(int textView, String error) {
         EditText toCheck = (EditText)findViewById(textView);
