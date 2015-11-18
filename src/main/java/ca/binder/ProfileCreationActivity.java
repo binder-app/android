@@ -23,6 +23,7 @@ import java.util.Map;
 
 import ca.binder.android.InternalPhoto;
 import ca.binder.domain.Course;
+import ca.binder.domain.CourseListManager;
 import ca.binder.domain.ProfileBuilder;
 import ca.binder.remote.Callback;
 import ca.binder.remote.Server;
@@ -40,8 +41,12 @@ public class ProfileCreationActivity extends Activity {
     private boolean photoTaken = false;
     private Dialog currentDialog;
 
+    private CourseListManager courseListManager;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        courseListManager = CourseListManager.getInstance(this);
+
         setContentView(R.layout.profile_creation_activity_layout);
 
         uploadImageView = (ImageView)findViewById(R.id.add_user_image);
