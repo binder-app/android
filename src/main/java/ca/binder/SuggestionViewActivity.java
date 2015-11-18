@@ -62,7 +62,7 @@ public class SuggestionViewActivity extends Activity {
 			@Override
 			public void use(Object result) {
 				//Executed after request finishes
-				if (result != false) {
+				if (!(boolean) result) {
 					List<Suggestion> resultSuggestions = (List<Suggestion>) result;
 					onGetSuggestionsSuccess(resultSuggestions);
 				} else {
