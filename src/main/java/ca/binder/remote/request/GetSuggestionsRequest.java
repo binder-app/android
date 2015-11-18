@@ -20,14 +20,14 @@ import ca.binder.remote.binding.SuggestionBinding;
  */
 public class GetSuggestionsRequest implements IServerRequest<List<Suggestion>> {
     @Override
-    public List<Suggestion> request(Server server) {
+    public Object request(Server server) {
         try {
             Request request = server.request("suggestions")
                     .get()
                     .build();
             Response response = server.execute(request);
             if (response.code() != 200) {
-                return new ArrayList<>();
+                return false;
             }
 
             SuggestionBinding binding = new SuggestionBinding();
@@ -42,9 +42,9 @@ public class GetSuggestionsRequest implements IServerRequest<List<Suggestion>> {
             }
             return toReturn;
         } catch (IOException e) {
-            return new ArrayList<>();
+            return false;
         } catch (JSONException e) {
-            return new ArrayList<>();
+            return false;
         }
     }
 }

@@ -12,5 +12,5 @@ public interface IServerRequest<T> {
      * @param server makes physical request
      * @return response
      */
-    T request(Server server);
+    Object request(Server server);
 }

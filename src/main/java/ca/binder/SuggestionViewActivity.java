@@ -5,7 +5,9 @@
 package ca.binder;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ViewSwitcher;
@@ -30,7 +32,8 @@ import ca.binder.remote.request.LikeSuggestionRequest;
 public class SuggestionViewActivity extends Activity {
 
 	private final String LOG_TAG = "SwipeViewAcitivity";
-	private ProgressDialog dialog;
+	private ProgressDialog progressDialog;
+	private AlertDialog alertDialog;
 
 	@Bind(R.id.swipe_view_card_container)
 	SwipeFlingAdapterView flingContainer;
@@ -46,7 +49,7 @@ public class SuggestionViewActivity extends Activity {
 		ButterKnife.bind(this);
 
 		viewSwitcher = (ViewSwitcher) findViewById(R.id.suggestionViewSwitcher);
-		dialog = new ProgressDialog(SuggestionViewActivity.this);
+		progressDialog = new ProgressDialog(SuggestionViewActivity.this);
 		suggestionsToShow = new ArrayList<>();
 
 
@@ -54,19 +57,20 @@ public class SuggestionViewActivity extends Activity {
 
 		// get suggestions from api asynchronously
 		Server server = Server.standard(this);
-		new AsyncServerRequest<>(this, server, new GetSuggestionsRequest(), new Callback<List<Suggestion>>() {
+		new AsyncServerRequest<>(this, server, new GetSuggestionsRequest(), new Callback() {
 			@Override
-			public void use(List<Suggestion> suggestions) {
+			public void use(Object result) {
 				//Executed after request finishes
-				if (suggestions != null) {
-					onGetSuggestionsSuccess(suggestions);
+				if (result != false) {
+					List<Suggestion> resultSuggestions = (List<Suggestion>) result;
+					onGetSuggestionsSuccess(resultSuggestions);
 				} else {
 					onGetSuggestionsFailure();
 				}
 			}
 		}).run();
-		this.dialog.setMessage("Loading...");
-		this.dialog.show();
+		this.progressDialog.setMessage("Loading...");
+		this.progressDialog.show();
 
 
 		/**
@@ -92,19 +96,19 @@ public class SuggestionViewActivity extends Activity {
 				final Suggestion suggestion = (Suggestion) dataObject;
 
 				Server server = Server.standard(SuggestionViewActivity.this);
-				new AsyncServerRequest<>(SuggestionViewActivity.this, server, new DislikeSuggestionRequest(suggestion.getId()), new Callback<Boolean>() {
+				new AsyncServerRequest<>(SuggestionViewActivity.this, server, new DislikeSuggestionRequest(suggestion.getId()), new Callback() {
 					@Override
-					public void use(Boolean success) {
+					public void use(Object success) {
 						//Executed after request finishes
-						if (success) {
+						if ((Boolean) success) {
 							onSendSuggestionReactionSuccess(suggestion, SuggestionReaction.DISLIKE);
 						} else {
 							onSendSuggestionReactionFailure(suggestion, SuggestionReaction.DISLIKE);
 						}
 					}
 				}).run();
-				dialog.setMessage("Please wait...");
-				dialog.show();
+				progressDialog.setMessage("Please wait...");
+				progressDialog.show();
 			}
 
 			/**
@@ -118,19 +122,19 @@ public class SuggestionViewActivity extends Activity {
 				final Suggestion suggestion = (Suggestion) dataObject;
 
 				Server server = Server.standard(SuggestionViewActivity.this);
-				new AsyncServerRequest<>(SuggestionViewActivity.this, server, new LikeSuggestionRequest(suggestion.getId()), new Callback<Boolean>() {
+				new AsyncServerRequest<>(SuggestionViewActivity.this, server, new LikeSuggestionRequest(suggestion.getId()), new Callback() {
 					@Override
-					public void use(Boolean success) {
+					public void use(Object success) {
 						//Executed after request finishes
-						if (success) {
+						if ((Boolean) success) {
 							onSendSuggestionReactionSuccess(suggestion, SuggestionReaction.LIKE);
 						} else {
 							onSendSuggestionReactionFailure(suggestion, SuggestionReaction.LIKE);
 						}
 					}
 				}).run();
-				dialog.setMessage("Please wait...");
-				dialog.show();
+				progressDialog.setMessage("Please wait...");
+				progressDialog.show();
 			}
 
 			@Override
@@ -164,7 +168,7 @@ public class SuggestionViewActivity extends Activity {
 	 */
 	private void onSendSuggestionReactionSuccess(Suggestion suggestion, SuggestionReaction reaction) {
 		Log.d("Suggestion Reaction", reaction + " user " + suggestion.getId() + " succeeded");
-		dialog.dismiss();
+		progressDialog.dismiss();
 	}
 
 	/**
@@ -175,7 +179,14 @@ public class SuggestionViewActivity extends Activity {
 	 */
 	private void onSendSuggestionReactionFailure(Suggestion suggestion, SuggestionReaction reaction) {
 		Log.e("Suggestion Reaction", reaction + " user " + suggestion.getId() + " failed");
-		// TODO handle a failure more gracefully. retry?
+		progressDialog.dismiss();
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		alertDialog = builder.setMessage("Couldn't send your response. Are you connected to the Internet?").setCancelable(false).setPositiveButton("Let me check", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		}).create();
+		alertDialog.show();
 	}
 
 	private void onGetSuggestionsSuccess(List<Suggestion> suggestions) {
@@ -187,14 +198,21 @@ public class SuggestionViewActivity extends Activity {
 		flingContainer.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
 		checkForEmptySuggestionList(adapter.getCount());
-		dialog.dismiss();
+		progressDialog.dismiss();
 	}
 
 	private void onGetSuggestionsFailure() {
 
 		Log.e("GetSuggestions", "Getting suggestions failed");
-		dialog.dismiss();
-		// TODO handle failure
+		progressDialog.dismiss();
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		alertDialog = builder.setMessage("Couldn't get your suggestions. Are you connected to the Internet?").setCancelable(false).setPositiveButton("Let me check", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+				finish();
+			}
+		}).create();
+		alertDialog.show();
 	}
 
 

@@ -20,14 +20,14 @@ import ca.binder.remote.binding.MatchBinding;
  */
 public class GetMatchesRequest implements IServerRequest<List<Match>> {
     @Override
-    public List<Match> request(Server server) {
+    public Object request(Server server) {
         try {
             Request request = server.request("suggestions")
                     .get()
                     .build();
             Response response = server.execute(request);
             if (response.code() != 200) {
-                return new ArrayList<>();
+                return false;
             }
 
             MatchBinding binding = new MatchBinding();
