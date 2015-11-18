@@ -194,7 +194,7 @@ public class ProfileCreationActivity extends Activity {
 
 
     private void onProfileCreateFailure() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = fnew AlertDialog.Builder(this);
         currentDialog = builder.setMessage("Couldn't save profile. Are you connected to the Internet?")
                 .setCancelable(false)
                 .setPositiveButton("Let me check", new DialogInterface.OnClickListener() {
