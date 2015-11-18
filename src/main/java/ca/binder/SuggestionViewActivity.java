@@ -19,6 +19,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import ca.binder.domain.Course;
 import ca.binder.domain.Suggestion;
 import ca.binder.domain.SuggestionReaction;
 import ca.binder.remote.Callback;
@@ -53,7 +54,7 @@ public class SuggestionViewActivity extends Activity {
 		suggestionsToShow = new ArrayList<>();
 
 
-		//createTestSuggestions();
+		createTestSuggestions();
 
 		// get suggestions from api asynchronously
 		Server server = Server.standard(this);
@@ -232,8 +233,12 @@ public class SuggestionViewActivity extends Activity {
 	}
 
 	private void createTestSuggestions() {
-		suggestionsToShow.add(new Suggestion("1234", "Jeff", "Computing Science", "I am a Jeff", "Year 4", null));
-		suggestionsToShow.add(new Suggestion("1235", "Also Jeff", "Business Administration", "I am another Jeff", "Year 3", null));
+		List<Course> courses = new ArrayList<>();
+		courses.add(new Course("COMP 1234"));
+		courses.add(new Course("COMP 2345"));
+
+		suggestionsToShow.add(new Suggestion("1234", "Jeff", "Computing Science", "I am a Jeff", "Year 4", courses, null));
+		suggestionsToShow.add(new Suggestion("1235", "Also Jeff", "Business Administration", "I am another Jeff", "Year 3", courses, null));
 
 	}
 
