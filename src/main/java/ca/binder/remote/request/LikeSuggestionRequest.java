@@ -20,7 +20,7 @@ public class LikeSuggestionRequest implements IServerRequest<Boolean> {
     }
 
     @Override
-    public Boolean request(Server server) {
+    public Object request(Server server) {
         try {
             RequestBody body = RequestBody.create(Server.JSON, "{\"to\": \"" + likedId + "\"}");
             Request request = server.request("likes")

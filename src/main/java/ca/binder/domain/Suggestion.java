@@ -1,6 +1,6 @@
 package ca.binder.domain;
 
-import com.squareup.okhttp.OkHttpClient;
+import java.util.List;
 
 /**
  * @author Mitchell Hentges
@@ -11,14 +11,16 @@ public class Suggestion {
     private final String name;
     private final String program;
     private final String bio;
+    private final List<Course> courses;
     private final String year;
     private final IPhoto photo;
 
-    public Suggestion(String id, String name, String program, String bio, String year, IPhoto photo) {
+    public Suggestion(String id, String name, String program, String bio, String year, List<Course> courses, IPhoto photo) {
         this.id = id;
         this.name = name;
         this.program = program;
         this.bio = bio;
+        this.courses = courses;
         this.year = year;
         this.photo = photo;
     }
@@ -39,6 +41,10 @@ public class Suggestion {
         return bio;
     }
 
+    public List<Course> getCourses() {
+        return courses;
+    }
+
     public String getYear() {
         return year;
     }
@@ -47,11 +53,5 @@ public class Suggestion {
         return photo;
     }
 
-    public void like(OkHttpClient client) {
-        // TODO
-    }
 
-    public void unlike(OkHttpClient client) {
-        // TODO
-    }
 }

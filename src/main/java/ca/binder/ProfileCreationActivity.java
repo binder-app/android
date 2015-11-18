@@ -3,7 +3,6 @@ package ca.binder;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -151,11 +150,11 @@ public class ProfileCreationActivity extends Activity {
         }
 
         Server server = Server.standard(this);
-        new AsyncServerRequest<>(this, server, new UpdateProfileRequest(builder.build()), new Callback<Boolean>() {
+        new AsyncServerRequest<>(this, server, new UpdateProfileRequest(builder.build()), new Callback() {
             @Override
-            public void use(Boolean success) {
+            public void use(Object success) {
                 //Executed after request finishes
-                if (success) {
+                if ((Boolean) success) {
                     onProfileCreateSuccess();
                 } else {
                     onProfileCreateFailure();

@@ -20,7 +20,7 @@ public class DislikeSuggestionRequest implements IServerRequest<Boolean> {
     }
 
     @Override
-    public Boolean request(Server server) {
+    public Object request(Server server) {
         try {
             RequestBody body = RequestBody.create(Server.JSON, "{\"to\": \"" + dislikedId + "\"}");
             Request request = server.request("dislikes")

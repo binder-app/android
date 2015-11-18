@@ -2,10 +2,15 @@ package ca.binder.remote.binding;
 
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ca.binder.android.NullPhoto;
+import ca.binder.domain.Course;
 import ca.binder.domain.Suggestion;
 
 /**
@@ -22,6 +27,12 @@ public class SuggestionBinding implements JsonToModelBinding<Suggestion> {
             String bio = json.getString("bio");
             String year = json.getString("year");
 
+            JSONArray coursesArray = json.getJSONArray("courses");
+            List<Course> courses = new ArrayList<>();
+            for (int i = 0; i< coursesArray.length(); i++) {
+                courses.add(new Course(coursesArray.get(i).toString()));
+            }
+
             if (id == null || name == null || bio == null) {
                 Log.w("SuggestionBinding", "server didn't provide or returned null value");
                 return null;
@@ -30,7 +41,7 @@ public class SuggestionBinding implements JsonToModelBinding<Suggestion> {
             return new Suggestion(
                     id,
                     name, program,
-                    bio, year,
+                    bio, year, courses,
                     new NullPhoto() //TODO
             );
         } catch (JSONException e) {

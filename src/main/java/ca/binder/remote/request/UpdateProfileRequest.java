@@ -24,7 +24,7 @@ public class UpdateProfileRequest implements IServerRequest<Boolean> {
     }
 
     @Override
-    public Boolean request(Server server) {
+    public Object request(Server server) {
         JSONObject json = new ProfileBinding().json(profile);
         try {
             RequestBody body = RequestBody.create(Server.JSON, json.toString());
