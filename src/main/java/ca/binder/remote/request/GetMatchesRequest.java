@@ -42,9 +42,9 @@ public class GetMatchesRequest implements IServerRequest<List<Match>> {
             }
             return toReturn;
         } catch (IOException e) {
-            return new ArrayList<>();
+            return false;
         } catch (JSONException e) {
-            return new ArrayList<>();
+            return false;
         }
     }
 }
