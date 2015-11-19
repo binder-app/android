@@ -1,6 +1,6 @@
 package ca.binder.domain;
 
-import ca.binder.remote.RemotePhoto;
+import ca.binder.remote.Photo;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public class Suggestion {
     private final IPhoto photo;
 
     public Suggestion(String id, String name, String program, String bio, String year, List<Course> courses, String photoUrl) {
-        this(id, name, program, bio, year, courses, new RemotePhoto(photoUrl));
+        this(id, name, program, bio, year, courses, new Photo(photoUrl));
     }
 
     public Suggestion(String id, String name, String program, String bio, String year, List<Course> courses, IPhoto photo) {
