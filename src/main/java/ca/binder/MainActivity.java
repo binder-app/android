@@ -35,32 +35,38 @@ public class MainActivity extends Activity {
         setContentView(R.layout.main);
 
         maybeLaunchFirstLaunchLaunch();
-        checkForMatches();
     }
 
     /**
-     * Check to see if it is the first launch
+     * If launch is the first launch, launch first launch activity
      */
     private void maybeLaunchFirstLaunchLaunch() {
-
-        //Check to see if the ProfileCreationActivity has ever completed
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        boolean previouslyStarted = sharedPreferences.getBoolean(getString(R.string.previously_started), false);
-
-        if (!previouslyStarted) {
+        if (isFirstLaunch()) {
             // first launch / profile creation
             Intent intent = new Intent(this, ProfileCreationActivity.class);
             startActivityForResult(intent, FIRST_LAUNCH_REQUEST);
         } else {
             // start viewing suggestions
-            startActivity(new Intent(this, SuggestionViewActivity.class));
+            //checkForMatches();
+            Intent intent = new Intent(getBaseContext(), SuggestionViewActivity.class);
+            startActivity(intent);
             finish();
         }
 
     }
 
     /**
-     *
+     * Helper method for launching first launch launch
+     * @return  - whether we should launch first launch launch
+     */
+    private boolean isFirstLaunch() {
+        //Check to see if the ProfileCreationActivity has ever completed
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        return !sharedPreferences.getBoolean(getString(R.string.previously_started), false);
+    }
+
+    /**
+     *  Method called when FirstLaunchActivity returns its result
      * @param requestCode   - Code used to identify where the startActivityForResult is called from
      * @param resultCode    - Identifies if the activity completed (RESULT_OK, _CANCELLED, etc)
      * @param data          - Data passed back from the activity
@@ -95,23 +101,34 @@ public class MainActivity extends Activity {
             //Called after request finishes
             @Override
             public void use(Object success) {
-                if(!((ArrayList<Match>)success).isEmpty()) {
+//                if(!((ArrayList<Match>)success).isEmpty()) {
+//                    ArrayList<Match> matchList = (ArrayList<Match>) success;
+//                    Intent intent = new Intent(getBaseContext(), ViewMatchesActivity.class);
+//                    intent.putExtra("matches", matchList);
+//                    startActivity(intent);
+//                }
+//                else {
+//                    if(!(boolean)success) {
+//                        onGetMatchesFailure();
+//                    }
+//                    Intent intent = new Intent(getBaseContext(), SuggestionViewActivity.class);
+//                    startActivity(intent);
+//                }
+                if (!(boolean) success) {
+
                     ArrayList<Match> matchList = (ArrayList<Match>) success;
-                    Intent intent = new Intent(getBaseContext(), ViewMatchesActivity.class);
-                    intent.putExtra("matches", matchList);
-                    startActivity(intent);
-                }
-                else {
-                    if(!((Boolean)success)) {
-                        onGetMatchesFailure();
+                    if(!matchList.isEmpty()) {
+                        Intent intent = new Intent(getBaseContext(), ViewMatchesActivity.class);
+                        intent.putExtra("matches", matchList);
+                        startActivity(intent);
                     }
-                    Intent intent = new Intent(getBaseContext(), SuggestionViewActivity.class);
-                    startActivity(intent);
+
+                } else {
+                    onGetMatchesFailure();
                 }
             }
         }).run();
     }
-
 
     /**
      * Handler when a get matches request fails
