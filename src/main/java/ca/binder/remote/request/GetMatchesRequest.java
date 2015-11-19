@@ -22,7 +22,7 @@ public class GetMatchesRequest implements IServerRequest<List<Match>> {
     @Override
     public Object request(Server server) {
         try {
-            Request request = server.request("suggestions")
+            Request request = server.request("matches")
                     .get()
                     .build();
             Response response = server.execute(request);
