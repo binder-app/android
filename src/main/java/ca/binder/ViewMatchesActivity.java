@@ -58,14 +58,15 @@ public class ViewMatchesActivity extends Activity {
             @Override
             public void onClick(View v) {
                 //Remove the first (current) Match from the list
-                //showNewMatch will always show first Mathc
+                //showNewMatch will always show first Match
                 matches.remove(0);
                 showNewMatch();
             }
         });
 
-        //TODO: Set user photo and name
+        //TODO: Set user photo and name - need to store photo and name locally on profile create
 
+        //Get list of matches
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         matches = (ArrayList<Match>) extras.getSerializable("matches");
