@@ -35,6 +35,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.main);
 
         maybeLaunchFirstLaunchLaunch();
+        checkForMatches();
     }
 
     /**
@@ -86,7 +87,7 @@ public class MainActivity extends Activity {
 
 
     /**
-     *
+     * Check to see if the user has any matches
      */
     private void checkForMatches() {
         Server server = Server.standard(this);
@@ -105,7 +106,7 @@ public class MainActivity extends Activity {
                         onGetMatchesFailure();
                     }
                     Intent intent = new Intent(getBaseContext(), SuggestionViewActivity.class);
-
+                    startActivity(intent);
                 }
             }
         }).run();

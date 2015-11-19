@@ -243,6 +243,11 @@ public class SuggestionViewActivity extends Activity {
 	}
 
 
+	@Override
+	public void onBackPressed() {
+		finishAffinity();
+	}
+
 }
 
 
