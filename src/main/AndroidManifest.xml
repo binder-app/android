@@ -28,6 +28,12 @@
 
         </activity>
         <activity
+            android:name=".ViewMatchesActivity"
+            android:label="ViewMatchesActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
+        <activity
             android:name=".SuggestionViewActivity"
             android:screenOrientation="portrait">
             <!--<intent-filter>-->
