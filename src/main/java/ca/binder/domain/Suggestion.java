@@ -1,5 +1,7 @@
 package ca.binder.domain;
 
+import ca.binder.remote.RemotePhoto;
+
 import java.util.List;
 
 /**
@@ -14,6 +16,10 @@ public class Suggestion {
     private final List<Course> courses;
     private final String year;
     private final IPhoto photo;
+
+    public Suggestion(String id, String name, String program, String bio, String year, List<Course> courses, String photoUrl) {
+        this(id, name, program, bio, year, courses, new RemotePhoto(photoUrl));
+    }
 
     public Suggestion(String id, String name, String program, String bio, String year, List<Course> courses, IPhoto photo) {
         this.id = id;
