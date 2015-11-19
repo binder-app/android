@@ -34,7 +34,8 @@ public class Photo implements IPhoto {
         bitmap = BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
     }
 
-    public String toBase64() {
+    @Override
+    public String base64() {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] bytes = stream.toByteArray();
@@ -42,7 +43,7 @@ public class Photo implements IPhoto {
     }
 
     @Override
-    public Drawable getDrawable(Context context) {
+    public Drawable drawable(Context context) {
 
         return new BitmapDrawable(context.getResources(), bitmap);
     }

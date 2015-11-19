@@ -26,6 +26,7 @@ public class ProfileBinding implements ModelToJsonBinding<Profile> {
                 courseArray.put(course.getName());
             }
             json.put("courses", courseArray);
+            json.put("photo", object.getPhoto().base64());
             return json;
         } catch (JSONException e) {
             return null;

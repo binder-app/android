@@ -13,5 +13,11 @@ public interface IPhoto {
      * @return {@link Drawable}
      * @param context
      */
-    Drawable getDrawable(Context context);
+    Drawable drawable(Context context);
+
+    /**
+     * Returns the image in Base64 format
+     * @return Base64 String image
+     */
+    String base64();
 }
