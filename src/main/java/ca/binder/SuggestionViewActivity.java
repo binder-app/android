@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ViewSwitcher;
 
+import ca.binder.android.NullPhoto;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
@@ -237,8 +238,8 @@ public class SuggestionViewActivity extends Activity {
 		courses.add(new Course("COMP 1234"));
 		courses.add(new Course("COMP 2345"));
 
-		suggestionsToShow.add(new Suggestion("1234", "Jeff", "Computing Science", "I am a Jeff", "Year 4", courses, null));
-		suggestionsToShow.add(new Suggestion("1235", "Also Jeff", "Business Administration", "I am another Jeff", "Year 3", courses, null));
+		suggestionsToShow.add(new Suggestion("1234", "Jeff", "Computing Science", "I am a Jeff", "Year 4", courses, new NullPhoto()));
+		suggestionsToShow.add(new Suggestion("1235", "Also Jeff", "Business Administration", "I am another Jeff", "Year 3", courses, new NullPhoto()));
 
 	}
 

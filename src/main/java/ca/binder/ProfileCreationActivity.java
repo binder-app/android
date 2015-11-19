@@ -6,38 +6,35 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Spinner;
-import android.widget.Toast;
+import android.widget.*;
+import ca.binder.domain.Course;
+import ca.binder.domain.CourseListManager;
+import ca.binder.domain.ProfileBuilder;
+import ca.binder.remote.Callback;
+import ca.binder.remote.Photo;
+import ca.binder.remote.Server;
+import ca.binder.remote.request.AsyncServerRequest;
+import ca.binder.remote.request.UpdateProfileRequest;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ca.binder.android.InternalPhoto;
-import ca.binder.domain.Course;
-import ca.binder.domain.CourseListManager;
-import ca.binder.domain.ProfileBuilder;
-import ca.binder.remote.Callback;
-import ca.binder.remote.Server;
-import ca.binder.remote.request.AsyncServerRequest;
-import ca.binder.remote.request.UpdateProfileRequest;
-
 /**
- * Created by SheldonCOMP4980 on 11/5/2015.
+ * @author SheldonCOMP4980
+ * @since 11/5/2015.
  */
 public class ProfileCreationActivity extends Activity {
 
     private final int IMAGE_CAPTURE_REQUEST_CODE = 1;
     private ImageView uploadImageView;
-    private InternalPhoto photo;
+    private Photo photo;
     private boolean photoTaken = false;
     private Dialog currentDialog;
 
@@ -45,6 +42,12 @@ public class ProfileCreationActivity extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.default_photo);
+        String str = new Photo(bm).base64();
+        Log.e("DERP", str);
+        /*
+
         courseListManager = CourseListManager.getInstance(this);
 
         setContentView(R.layout.profile_creation_activity_layout);
@@ -59,7 +62,7 @@ public class ProfileCreationActivity extends Activity {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(intent, IMAGE_CAPTURE_REQUEST_CODE);
             }
-        });
+        });*/
     }
 
 
@@ -77,7 +80,7 @@ public class ProfileCreationActivity extends Activity {
         array.add("Year 6");
 
         //Create adapter using above array
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_spinner_item, array);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -91,8 +94,8 @@ public class ProfileCreationActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == IMAGE_CAPTURE_REQUEST_CODE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
-            photo = new InternalPhoto((Bitmap) extras.get("data"));
-            uploadImageView.setImageDrawable(photo.getDrawable(this));
+            photo = new Photo((Bitmap) extras.get("data"));
+            uploadImageView.setImageDrawable(photo.drawable(this));
 
             photoTaken = true;
         }

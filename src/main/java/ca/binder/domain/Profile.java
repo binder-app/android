@@ -1,9 +1,9 @@
 package ca.binder.domain;
 
+import ca.binder.remote.Photo;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import ca.binder.android.InternalPhoto;
 
 /**
  * @author Mitchell Hentges
@@ -16,7 +16,7 @@ public class Profile {
     private String bio;
     private String phone;
     private String year;
-    private InternalPhoto photo;
+    private Photo photo;
     private List<Course> courses = new ArrayList<>();
 
     public Profile(String id) {
@@ -71,7 +71,7 @@ public class Profile {
         return photo;
     }
 
-    public void setPhoto(InternalPhoto photo) {
+    public void setPhoto(Photo photo) {
         this.photo = photo;
     }
 

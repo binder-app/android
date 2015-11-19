@@ -1,9 +1,8 @@
 package ca.binder.domain;
 
 import android.content.Context;
-
 import ca.binder.android.DeviceInfo;
-import ca.binder.android.InternalPhoto;
+import ca.binder.remote.Photo;
 
 /**
  * @author Mitchell Hentges
@@ -51,7 +50,7 @@ public class ProfileBuilder {
         return this;
     }
 
-    public ProfileBuilder photo(InternalPhoto photo) {
+    public ProfileBuilder photo(Photo photo) {
         profile.setPhoto(photo);
         return this;
     }
