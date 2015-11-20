@@ -45,10 +45,6 @@ public class ProfileCreationActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.default_photo);
-        String str = new Photo(bm).base64();
-        Log.e("DERP", str);
-
         courseListManager = CourseListManager.getInstance(this);
 
         setContentView(R.layout.profile_creation_activity_layout);
