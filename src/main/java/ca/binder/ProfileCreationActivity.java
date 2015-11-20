@@ -11,7 +11,17 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.widget.*;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import ca.binder.domain.Course;
 import ca.binder.domain.CourseListManager;
 import ca.binder.domain.ProfileBuilder;
@@ -20,11 +30,6 @@ import ca.binder.remote.Photo;
 import ca.binder.remote.Server;
 import ca.binder.remote.request.AsyncServerRequest;
 import ca.binder.remote.request.UpdateProfileRequest;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author SheldonCOMP4980
@@ -46,7 +51,7 @@ public class ProfileCreationActivity extends Activity {
         Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.default_photo);
         String str = new Photo(bm).base64();
         Log.e("DERP", str);
-        /*
+
 
         courseListManager = CourseListManager.getInstance(this);
 
@@ -62,7 +67,7 @@ public class ProfileCreationActivity extends Activity {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(intent, IMAGE_CAPTURE_REQUEST_CODE);
             }
-        });*/
+        });
     }
 
 
