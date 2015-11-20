@@ -14,7 +14,8 @@
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.32"
         android:nextFocusUp="@id/parent_layout"
-        android:src="@drawable/add_user"/>
+        android:src="@drawable/add_user"
+        android:layout_marginTop="10dp"/>
 
     <EditText
         android:layout_width="match_parent"
@@ -77,12 +78,15 @@
         android:nextFocusUp="@id/parent_layout" />
 
     <Button
-        android:layout_width="fill_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:text="@string/start_binding"
         android:id="@+id/finish"
         android:layout_gravity="center_horizontal"
         android:nestedScrollingEnabled="false"
         android:onClick="onFinishSetup"
-        android:textSize="24dp" />
+        android:background="@drawable/contact_match_btn"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:layout_marginTop="5dp"/>
 </LinearLayout>

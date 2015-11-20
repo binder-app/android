@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="binder_yellow" type="color">#cfc732</color>
+    <color name="binder_dk_blue" type="color">#007977</color>
+    <color name="binder_lt_blue" type="color">#00b1a2</color>
+    <color name="binder_magenta" type="color">#99257C</color>
+    <color name="binder_purple" type="colour">#5E298B</color>
+    <color name="binder_green" type="colour">#478b27</color>
+    <color name="binder_grey" type="colour">#FF9E9E9E</color>
+
+</resources>
