@@ -18,7 +18,7 @@ public class Match implements Serializable{
 	private final IPhoto photo;
 	private final List<Course> courses;
 
-	public Match(String name, String bio, String phone, String program, String year, List<Course> courses, IPhoto photo) {
+	public Match(String name, String bio, String phone, String program, String year, IPhoto photo, List<Course> courses) {
 
         this.name = name;
 		this.bio = bio;
