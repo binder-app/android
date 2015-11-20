@@ -6,4 +6,6 @@
     <string name="start_binding">START BINDING</string>
     <string name="suggestionsEmptyMsg">No suggestions...check back later!</string>
     <string name="loadingText">Searching....</string>
+    <string name="reviewLaterBtnLabel">Review Later</string>
+    <string name="foundMatchLabel">We found a match!</string>
 </resources>

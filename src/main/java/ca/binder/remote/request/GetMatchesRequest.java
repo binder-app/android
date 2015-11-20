@@ -22,7 +22,7 @@ public class GetMatchesRequest implements IServerRequest<List<Match>> {
     @Override
     public Object request(Server server) {
         try {
-            Request request = server.request("suggestions")
+            Request request = server.request("matches")
                     .get()
                     .build();
             Response response = server.execute(request);
@@ -42,9 +42,9 @@ public class GetMatchesRequest implements IServerRequest<List<Match>> {
             }
             return toReturn;
         } catch (IOException e) {
-            return new ArrayList<>();
+            return false;
         } catch (JSONException e) {
-            return new ArrayList<>();
+            return false;
         }
     }
 }
