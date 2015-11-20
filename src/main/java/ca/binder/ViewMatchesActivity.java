@@ -2,7 +2,9 @@ package ca.binder;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import ca.binder.domain.Match;
+import ca.binder.remote.Photo;
 
 /**
  * Created by SheldonCOMP4980 on 11/18/2015.
@@ -63,7 +66,10 @@ public class ViewMatchesActivity extends Activity {
             }
         });
 
-        //TODO: Set user photo and name - need to store photo and name locally on profile create
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        userName.setText(sharedPreferences.getString("profile_name", "jeff"));
+        Photo profilePhoto = new Photo(sharedPreferences.getString("profile_image", ""));
+        userImage.setImageDrawable(profilePhoto.drawable(this));
 
         //Get list of matches
         Intent intent = getIntent();
@@ -77,8 +83,12 @@ public class ViewMatchesActivity extends Activity {
      * Shows the person in the first position in the list of matches
      */
     private void showNewMatch() {
-        matchName.setText(matches.get(0).getName());
-        //matchImage.setImageDrawable(matches.get(0).getPhoto().getDrawable());
+        if(matches.size() > 0) {
+            matchName.setText(matches.get(0).getName());
+            matchImage.setImageDrawable(matches.get(0).getPhoto().drawable(this));
+        } else {
+            onBackPressed();
+        }
     }
 
 
