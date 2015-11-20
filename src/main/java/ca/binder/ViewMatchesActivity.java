@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import ca.binder.domain.Match;
+import ca.binder.domain.Profile;
 import ca.binder.remote.Photo;
 
 /**
@@ -66,10 +68,13 @@ public class ViewMatchesActivity extends Activity {
             }
         });
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        userName.setText(sharedPreferences.getString("profile_name", "jeff"));
-        Photo profilePhoto = new Photo(sharedPreferences.getString("profile_photo", ""));
-        userImage.setImageDrawable(profilePhoto.drawable(this));
+        Profile userProfile = Profile.load(this);
+        if(userProfile != null) {
+            userName.setText(userProfile.getName());
+            userImage.setImageDrawable(userProfile.getPhoto().drawable(this));
+        } else {
+            Log.e("ViewMatchesActivity", "Local user profile is null!");
+        }
 
         //Get list of matches
         Intent intent = getIntent();

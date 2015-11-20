@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.*;
 import ca.binder.domain.Course;
 import ca.binder.domain.CourseListManager;
+import ca.binder.domain.Profile;
 import ca.binder.domain.ProfileBuilder;
 import ca.binder.remote.Callback;
 import ca.binder.remote.Photo;
@@ -37,6 +38,7 @@ public class ProfileCreationActivity extends Activity {
     private Photo photo;
     private boolean photoTaken = false;
     private Dialog currentDialog;
+    private Profile profile;
 
     private CourseListManager courseListManager;
 
@@ -46,7 +48,6 @@ public class ProfileCreationActivity extends Activity {
         Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.default_photo);
         String str = new Photo(bm).base64();
         Log.e("DERP", str);
-        /*
 
         courseListManager = CourseListManager.getInstance(this);
 
@@ -62,7 +63,7 @@ public class ProfileCreationActivity extends Activity {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(intent, IMAGE_CAPTURE_REQUEST_CODE);
             }
-        });*/
+        });
     }
 
 
@@ -157,8 +158,10 @@ public class ProfileCreationActivity extends Activity {
             builder.course(new Course(course));
         }
 
+        profile = builder.build();
+
         Server server = Server.standard(this);
-        new AsyncServerRequest<>(this, server, new UpdateProfileRequest(builder.build()), new Callback() {
+        new AsyncServerRequest<>(this, server, new UpdateProfileRequest(profile), new Callback() {
             @Override
             public void use(Object success) {
                 //Executed after request finishes
@@ -211,6 +214,7 @@ public class ProfileCreationActivity extends Activity {
 
     private void onProfileCreateSuccess() {
         Log.d("CreateProfileTask", "Profile created successfully!");
+        profile.save(this);
         Intent returnIntent = new Intent();
         returnIntent.putExtra("finished", true);
         setResult(Activity.RESULT_OK, returnIntent);
