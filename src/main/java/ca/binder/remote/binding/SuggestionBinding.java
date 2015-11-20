@@ -12,6 +12,7 @@ import java.util.List;
 import ca.binder.android.NullPhoto;
 import ca.binder.domain.Course;
 import ca.binder.domain.Suggestion;
+import ca.binder.remote.Photo;
 
 /**
  * @author Mitchell Hentges
@@ -26,6 +27,7 @@ public class SuggestionBinding implements JsonToModelBinding<Suggestion> {
             String program = json.getString("program");
             String bio = json.getString("bio");
             String year = json.getString("year");
+            String photo = json.getString("photo");
 
             JSONArray coursesArray = json.getJSONArray("courses");
             List<Course> courses = new ArrayList<>();
@@ -42,7 +44,7 @@ public class SuggestionBinding implements JsonToModelBinding<Suggestion> {
                     id,
                     name, program,
                     bio, year, courses,
-                    new NullPhoto() //TODO
+                    new Photo(photo)
             );
         } catch (JSONException e) {
             return null;
