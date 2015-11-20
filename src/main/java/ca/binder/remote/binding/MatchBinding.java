@@ -34,7 +34,7 @@ public class MatchBinding implements JsonToModelBinding<Match> {
 				coursesList.add(new Course(courseArray.get(i).toString()));
 			}
 
-            if (name == null || phone == null) {
+            if (name == null || bio == null || phone == null || program == null || year == null || photo == null) {
                 Log.w("MatchBinding", "server didn't provide or returned null value");
                 return null;
             }

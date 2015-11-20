@@ -35,7 +35,7 @@ public class SuggestionBinding implements JsonToModelBinding<Suggestion> {
                 courses.add(new Course(coursesArray.get(i).toString()));
             }
 
-            if (id == null || name == null || bio == null) {
+            if (id == null || name == null || program == null || bio == null || year == null || photo == null) {
                 Log.w("SuggestionBinding", "server didn't provide or returned null value");
                 return null;
             }
