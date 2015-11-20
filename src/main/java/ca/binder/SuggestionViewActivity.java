@@ -63,10 +63,10 @@ public class SuggestionViewActivity extends Activity {
 			@Override
 			public void use(Object result) {
 				//Executed after request finishes
-				if (!(boolean) result) {
+				if (!(result instanceof Boolean)) {
 					List<Suggestion> resultSuggestions = (List<Suggestion>) result;
 					onGetSuggestionsSuccess(resultSuggestions);
-				} else {
+				} else if (!(boolean) result) {
 					onGetSuggestionsFailure();
 				}
 			}
@@ -243,6 +243,11 @@ public class SuggestionViewActivity extends Activity {
 
 	}
 
+
+	@Override
+	public void onBackPressed() {
+		finishAffinity();
+	}
 
 }
 

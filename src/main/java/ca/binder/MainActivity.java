@@ -1,10 +1,21 @@
 package ca.binder;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
+
+import java.util.ArrayList;
+
+import ca.binder.domain.Match;
+import ca.binder.remote.Callback;
+import ca.binder.remote.Server;
+import ca.binder.remote.request.AsyncServerRequest;
+import ca.binder.remote.request.GetMatchesRequest;
 
 /**
  * Created by SheldonCOMP4980 on 11/5/2015.
@@ -23,28 +34,35 @@ public class MainActivity extends Activity {
     }
 
     /**
-     * Check to see if it is the first launch
+     * If launch is the first launch, launch first launch activity
      */
     private void maybeLaunchFirstLaunchLaunch() {
-
-        //Check to see if the ProfileCreationActivity has ever completed
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        boolean previouslyStarted = sharedPreferences.getBoolean(getString(R.string.previously_started), false);
-
-        if (!previouslyStarted) {
+        if (isFirstLaunch()) {
             // first launch / profile creation
             Intent intent = new Intent(this, ProfileCreationActivity.class);
             startActivityForResult(intent, FIRST_LAUNCH_REQUEST);
         } else {
             // start viewing suggestions
-            startActivity(new Intent(this, SuggestionViewActivity.class));
+            checkForMatches();
+            Intent intent = new Intent(getBaseContext(), SuggestionViewActivity.class);
+            startActivity(intent);
             finish();
         }
 
     }
 
     /**
-     *
+     * Helper method for launching first launch launch
+     * @return  - whether we should launch first launch launch
+     */
+    private boolean isFirstLaunch() {
+        //Check to see if the ProfileCreationActivity has ever completed
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        return !sharedPreferences.getBoolean(getString(R.string.previously_started), false);
+    }
+
+    /**
+     *  Method called when FirstLaunchActivity returns its result
      * @param requestCode   - Code used to identify where the startActivityForResult is called from
      * @param resultCode    - Identifies if the activity completed (RESULT_OK, _CANCELLED, etc)
      * @param data          - Data passed back from the activity
@@ -67,5 +85,46 @@ public class MainActivity extends Activity {
     //Ensure back does not navigate back to other pages, not necessary for functionality
     @Override
     public void onBackPressed() {
+    }
+
+
+    /**
+     * Check to see if the user has any matches
+     */
+    private void checkForMatches() {
+        Server server = Server.standard(this);
+        new AsyncServerRequest<>(this, server, new GetMatchesRequest(), new Callback() {
+            //Called after request finishes
+            @Override
+            public void use(Object result) {
+                if (!(result instanceof Boolean)) {
+
+                    ArrayList<Match> matchList = (ArrayList<Match>) result;
+                    if(!matchList.isEmpty()) {
+                        Intent intent = new Intent(getBaseContext(), ViewMatchesActivity.class);
+                        intent.putExtra("matches", matchList);
+                        startActivity(intent);
+                    }
+
+                } else if (!(boolean) result) {
+                    onGetMatchesFailure();
+                }
+            }
+        }).run();
+    }
+
+    /**
+     * Handler when a get matches request fails
+     */
+    private void onGetMatchesFailure() {
+        AlertDialog alertDialog;
+        Log.e("Main Activity", "Get Matches request failed");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        alertDialog = builder.setMessage("Couldn't retrieve matches. Are you connected to the Internet?").setCancelable(false).setPositiveButton("Let me check", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        }).create();
+        alertDialog.show();
     }
 }
