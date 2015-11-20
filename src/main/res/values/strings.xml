@@ -3,7 +3,7 @@
     <string name="app_name">Binder</string>
     <string name="server">http://getbinder.ddns.net</string>
     <string name="previously_started">PREVIOUSLY_STARTED</string>
-    <string name="start_binding">START BINDING</string>
+    <string name="start_binding">Start Binding!</string>
     <string name="suggestionsEmptyMsg">No suggestions...check back later!</string>
     <string name="loadingText">Searching....</string>
     <string name="reviewLaterBtnLabel">Review Later</string>

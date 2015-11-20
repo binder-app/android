@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="#FFFFFF"
+              android:background="@color/binder_lt_blue"
               android:orientation="vertical"
     android:weightSum="1">
 
@@ -20,7 +20,9 @@
             android:gravity="center_vertical"
             android:text="Large Text"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#000000"/>
+            android:textColor="@color/binder_yellow"
+            android:textStyle="bold"
+            android:textSize="30sp"/>
 
         <ImageView
             android:id="@+id/infoButtonImageView"
@@ -66,6 +68,13 @@
         android:layout_weight="0.64"
         android:background="#494c4141"
         android:dividerHeight="0dp"/>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_weight=".04">
+    </TableRow>
 
     <ListView
         android:id="@+id/suggestionCoursesListView"
