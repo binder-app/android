@@ -2,8 +2,8 @@ package ca.binder;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -45,15 +45,10 @@ public class ViewMatchesActivity extends Activity {
             public void onClick(View v) {
                 //Launch SMS app with number set to match's phone number
                 Match contact = matches.get(0);
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse("sms:"));
-//                intent.setType("vnd.android-dir/mms-sms");
-                intent.putExtra("address", contact.getPhone());
+                Intent intent = new Intent(ContactsContract.Intents.Insert.ACTION);
+                intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
+                intent.putExtra(ContactsContract.Intents.Insert.PHONE, contact.getPhone()).putExtra(ContactsContract.Intents.Insert.PHONE_TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE).putExtra(ContactsContract.Intents.Insert.NAME, contact.getName()).putExtra(ContactsContract.Intents.Insert.NOTES, "Matched by Binder. " + contact.getYear() + " " + contact.getProgram());
                 startActivity(intent);
-//                        Uri.fromParts("sms:", contact.getPhone(), null));
-//                startActivity(intent);
-//                matches.remove(0);
-//                showNewMatch();
             }
         });
 
