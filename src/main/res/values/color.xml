@@ -7,5 +7,6 @@
     <color name="binder_purple" type="colour">#5E298B</color>
     <color name="binder_green" type="colour">#478b27</color>
     <color name="binder_grey" type="colour">#FF9E9E9E</color>
+    <color name="binder_dk_grey" type="colour">#272728</color>
 
 </resources>

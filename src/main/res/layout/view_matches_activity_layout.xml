@@ -54,7 +54,8 @@
                     android:id="@+id/matchedUserNameLabel"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
-                    android:gravity="center_horizontal"/>
+                    android:gravity="center_horizontal"
+                    android:textColor="#000000"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -83,7 +84,8 @@
                     android:id="@+id/currentUserNameLabel"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
-                    android:gravity="center_horizontal"/>
+                    android:gravity="center_horizontal"
+                    android:textColor="#000000"/>
             </RelativeLayout>
 
         </RelativeLayout>
@@ -103,7 +105,7 @@
             android:text="New Button"
             android:id="@+id/addContactButton"
             android:width="240dp"
-            android:background="@drawable/contact_match_btn"
+            android:background="@drawable/rounded_green_btn"
             android:textColor="#ffffff"
             android:textSize="20sp"/>
     </LinearLayout>
@@ -122,7 +124,7 @@
             android:id="@+id/reviewLaterButton"
             android:background="@drawable/rounded_btn_grey"
             android:width="140dp"
-            />
+            android:textColor="#FFFFFF"/>
     </LinearLayout>
 
 </LinearLayout>
