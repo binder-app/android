@@ -18,7 +18,7 @@ import ca.binder.domain.Match;
  */
 public class ViewMatchesActivity extends Activity {
 
-    private Button sendSMS;
+    private Button addContactButton;
     private Button reviewLater;
     private ImageView userImage;
     private TextView userName;
@@ -32,7 +32,7 @@ public class ViewMatchesActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_matches_activity_layout);
 
-        sendSMS = (Button)findViewById(R.id.sendSMSButton);
+        addContactButton = (Button) findViewById(R.id.addContactButton);
         reviewLater = (Button)findViewById(R.id.reviewLaterButton);
         userImage = (ImageView)findViewById(R.id.currentUserImageView);
         userName = (TextView)findViewById(R.id.currentUserNameLabel);
@@ -40,7 +40,7 @@ public class ViewMatchesActivity extends Activity {
         matchName = (TextView)findViewById(R.id.matchedUserNameLabel);
 
         //onClick for SEND SMS button
-        sendSMS.setOnClickListener(new View.OnClickListener() {
+        addContactButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Launch SMS app with number set to match's phone number
@@ -79,6 +79,8 @@ public class ViewMatchesActivity extends Activity {
     private void showNewMatch() {
         matchName.setText(matches.get(0).getName());
         //matchImage.setImageDrawable(matches.get(0).getPhoto().getDrawable());
+
+        addContactButton.setText("Contact " + matches.get(0).getName());
     }
 
 
