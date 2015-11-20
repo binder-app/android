@@ -11,6 +11,7 @@ import java.util.List;
 
 import ca.binder.domain.Course;
 import ca.binder.domain.Match;
+import ca.binder.remote.Photo;
 
 /**
  * @author Mitchell Hentges
@@ -25,6 +26,7 @@ public class MatchBinding implements JsonToModelBinding<Match> {
 			String phone = json.getString("phone");
 			String program = json.getString("program");
 			String year = json.getString("year");
+            String photo = json.getString("photo");
 
 			JSONArray courseArray = json.getJSONArray("courses");
 			List<Course> coursesList = new ArrayList<>();
@@ -32,15 +34,13 @@ public class MatchBinding implements JsonToModelBinding<Match> {
 				coursesList.add(new Course(courseArray.get(i).toString()));
 			}
 
-            if (name == null || phone == null) {
+            if (name == null || bio == null || phone == null || program == null || year == null || photo == null) {
                 Log.w("MatchBinding", "server didn't provide or returned null value");
                 return null;
             }
 
             return new Match(
-                    name, bio, phone, program, year,
-					//photo TODO
-					coursesList);
+                    name, bio, phone, program, year, new Photo(photo), coursesList);
         } catch (JSONException e) {
             return null;
         }

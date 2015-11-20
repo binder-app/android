@@ -15,17 +15,17 @@ public class Match implements Serializable{
 	private final String phone;
 	private final String program;
 	private final String year;
-	//private final IPhoto photo; // TODO
+	private final IPhoto photo;
 	private final List<Course> courses;
 
-	public Match(String name, String bio, String phone, String program, String year, List<Course> courses) {
+	public Match(String name, String bio, String phone, String program, String year, IPhoto photo, List<Course> courses) {
 
         this.name = name;
 		this.bio = bio;
 		this.phone = phone;
 		this.program = program;
 		this.year = year;
-		//this.photo = photo;
+		this.photo = photo;
 		this.courses = courses;
 	}
 
@@ -41,13 +41,9 @@ public class Match implements Serializable{
 		return bio;
 	}
 
-//    public InternalPhoto getPhoto() {
-//        return photo;
-//    }
-//
-//	public InternalPhoto setPhoto(InternalPhoto photo) {
-//		this.photo = photo;
-//	}
+    public IPhoto getPhoto() {
+        return photo;
+    }
 
 	public List<Course> getCourses() {
 		return courses;
