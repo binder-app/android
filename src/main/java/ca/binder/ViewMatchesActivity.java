@@ -68,7 +68,7 @@ public class ViewMatchesActivity extends Activity {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         userName.setText(sharedPreferences.getString("profile_name", "jeff"));
-        Photo profilePhoto = new Photo(sharedPreferences.getString("profile_image", ""));
+        Photo profilePhoto = new Photo(sharedPreferences.getString("profile_photo", ""));
         userImage.setImageDrawable(profilePhoto.drawable(this));
 
         //Get list of matches
