@@ -45,11 +45,15 @@ public class ViewMatchesActivity extends Activity {
             public void onClick(View v) {
                 //Launch SMS app with number set to match's phone number
                 Match contact = matches.get(0);
-                Intent intent = new Intent(Intent.ACTION_VIEW,
-                        Uri.fromParts("sms:", contact.getPhone(), null));
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse("sms:"));
+//                intent.setType("vnd.android-dir/mms-sms");
+                intent.putExtra("address", contact.getPhone());
                 startActivity(intent);
-                matches.remove(0);
-                showNewMatch();
+//                        Uri.fromParts("sms:", contact.getPhone(), null));
+//                startActivity(intent);
+//                matches.remove(0);
+//                showNewMatch();
             }
         });
 
@@ -70,6 +74,7 @@ public class ViewMatchesActivity extends Activity {
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         matches = (ArrayList<Match>) extras.getSerializable("matches");
+        showNewMatch();
     }
 
 

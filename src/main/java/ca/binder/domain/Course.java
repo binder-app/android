@@ -1,10 +1,12 @@
 package ca.binder.domain;
 
+import java.io.Serializable;
+
 /**
  * @author Mitchell Hentges
  * @since 11/11/2015
  */
-public class Course {
+public class Course implements Serializable {
     private final String name;
 
     public Course(String name) {

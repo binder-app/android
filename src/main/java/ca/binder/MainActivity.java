@@ -6,16 +6,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import ca.binder.domain.Match;
-import ca.binder.domain.Suggestion;
-import ca.binder.domain.SuggestionReaction;
 import ca.binder.remote.Callback;
 import ca.binder.remote.Server;
 import ca.binder.remote.request.AsyncServerRequest;
@@ -47,7 +43,7 @@ public class MainActivity extends Activity {
             startActivityForResult(intent, FIRST_LAUNCH_REQUEST);
         } else {
             // start viewing suggestions
-            //checkForMatches();
+            checkForMatches();
             Intent intent = new Intent(getBaseContext(), SuggestionViewActivity.class);
             startActivity(intent);
             finish();
@@ -100,30 +96,17 @@ public class MainActivity extends Activity {
         new AsyncServerRequest<>(this, server, new GetMatchesRequest(), new Callback() {
             //Called after request finishes
             @Override
-            public void use(Object success) {
-//                if(!((ArrayList<Match>)success).isEmpty()) {
-//                    ArrayList<Match> matchList = (ArrayList<Match>) success;
-//                    Intent intent = new Intent(getBaseContext(), ViewMatchesActivity.class);
-//                    intent.putExtra("matches", matchList);
-//                    startActivity(intent);
-//                }
-//                else {
-//                    if(!(boolean)success) {
-//                        onGetMatchesFailure();
-//                    }
-//                    Intent intent = new Intent(getBaseContext(), SuggestionViewActivity.class);
-//                    startActivity(intent);
-//                }
-                if (!(boolean) success) {
+            public void use(Object result) {
+                if (!(result instanceof Boolean)) {
 
-                    ArrayList<Match> matchList = (ArrayList<Match>) success;
+                    ArrayList<Match> matchList = (ArrayList<Match>) result;
                     if(!matchList.isEmpty()) {
                         Intent intent = new Intent(getBaseContext(), ViewMatchesActivity.class);
                         intent.putExtra("matches", matchList);
                         startActivity(intent);
                     }
 
-                } else {
+                } else if (!(boolean) result) {
                     onGetMatchesFailure();
                 }
             }
