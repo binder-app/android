@@ -1,12 +1,10 @@
 package ca.binder.domain;
 
-import java.io.Serializable;
-
 /**
  * @author Mitchell Hentges
  * @since 11/11/2015
  */
-public class Course implements Serializable {
+public class Course{
     private final String name;
 
     public Course(String name) {
@@ -25,7 +23,6 @@ public class Course implements Serializable {
         Course course = (Course) o;
 
         return !(name != null ? !name.equals(course.name) : course.name != null);
-
     }
 
     @Override

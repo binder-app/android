@@ -79,7 +79,7 @@ public class ViewMatchesActivity extends Activity {
         //Get list of matches
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
-        matches = (ArrayList<Match>) extras.getSerializable("matches");
+        matches = extras.getParcelable("matches");
         showNewMatch();
     }
 
