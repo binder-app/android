@@ -3,7 +3,6 @@ package ca.binder.domain;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -116,6 +115,7 @@ public class Match implements Parcelable {
 	public void writeToParcel(Parcel dest, int flags) {
 		//Creating formatted string for parceling Course objects as Strings
 		//To be remade after being un-parcelled using Course(String) constructor
+		//TODO: Implement Parcelable in Course, use writeTypedList() to write courses
 		String courseListString = "";
 		for(Course c : this.courses) {
 			courseListString += c.getName() + COURSE_LIST_DELIMITER;

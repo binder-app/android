@@ -2,9 +2,7 @@ package ca.binder;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +14,6 @@ import java.util.ArrayList;
 
 import ca.binder.domain.Match;
 import ca.binder.domain.Profile;
-import ca.binder.remote.Photo;
 
 /**
  * Created by SheldonCOMP4980 on 11/18/2015.
