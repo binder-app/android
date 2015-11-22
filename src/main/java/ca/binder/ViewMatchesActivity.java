@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import ca.binder.domain.Match;
+import ca.binder.domain.Profile;
 
 /**
  * Created by SheldonCOMP4980 on 11/18/2015.
@@ -63,12 +65,16 @@ public class ViewMatchesActivity extends Activity {
             }
         });
 
-        //TODO: Set user photo and name - need to store photo and name locally on profile create
+        Profile userProfile = Profile.load(this);
+        if(userProfile != null) {
+            userName.setText(userProfile.getName());
+            userImage.setImageDrawable(userProfile.getPhoto().drawable(this));
+        } else {
+            Log.e("ViewMatchesActivity", "Local user profile is null!");
+        }
 
         //Get list of matches
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-        matches = (ArrayList<Match>) extras.getSerializable("matches");
+        matches = getIntent().getParcelableArrayListExtra("matches");
         showNewMatch();
     }
 
@@ -77,10 +83,13 @@ public class ViewMatchesActivity extends Activity {
      * Shows the person in the first position in the list of matches
      */
     private void showNewMatch() {
-        matchName.setText(matches.get(0).getName());
-        //matchImage.setImageDrawable(matches.get(0).getPhoto().getDrawable());
-
-        addContactButton.setText("Contact " + matches.get(0).getName());
+        if(matches.size() > 0) {
+            matchName.setText(matches.get(0).getName());
+            matchImage.setImageDrawable(matches.get(0).getPhoto().drawable(this));
+            addContactButton.setText("Contact " + matches.get(0).getName());
+        } else {
+            onBackPressed();
+        }
     }
 
 

@@ -58,8 +58,7 @@ class SuggestionAdapter extends ArrayAdapter<Suggestion> {
 		}
 		suggestionCoursesListView.setAdapter(new ArrayAdapter<>(getContext(), R.layout.course_item_view, R.id.courseNameTextView, courseNames));
 
-		//TODO photo
-		//suggestionPhotoImageView.setImageDrawable(suggestion.getPhoto().drawable(getContext()));
+		suggestionPhotoImageView.setImageDrawable(suggestion.getPhoto().drawable(getContext()));
 
 		// info button shows bio in modal
 		ImageView infoButton = (ImageView) card.findViewById(R.id.infoButtonImageView);

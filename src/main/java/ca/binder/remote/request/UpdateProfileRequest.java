@@ -33,6 +33,7 @@ public class UpdateProfileRequest implements IServerRequest<Boolean> {
                     .build();
             return server.execute(request).code() == 200;
         } catch (IOException e) {
+            e.printStackTrace();
             return false;
         }
     }

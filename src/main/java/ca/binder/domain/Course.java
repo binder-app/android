@@ -25,7 +25,6 @@ public class Course implements Serializable {
         Course course = (Course) o;
 
         return !(name != null ? !name.equals(course.name) : course.name != null);
-
     }
 
     @Override
