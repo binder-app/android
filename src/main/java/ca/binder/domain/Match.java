@@ -16,7 +16,6 @@ import ca.binder.remote.Photo;
  */
 public class Match implements Parcelable {
 
-	private final String COURSE_LIST_DELIMITER = "&";
 
     private final String name;
 	private final String bio;
@@ -25,6 +24,7 @@ public class Match implements Parcelable {
 	private final String year;
 	private final IPhoto photo;
 	private final List<Course> courses;
+
 
 	public Match(String name, String bio, String phone, String program, String year, IPhoto photo, List<Course> courses) {
 
@@ -37,29 +37,6 @@ public class Match implements Parcelable {
 		this.courses = courses;
 	}
 
-	/**
-	 * Create Match from Parcel
-	 * 0: name, 1: bio, 2: phone, 3: program, 4: year, 5: photo(base64), 6: courses
-	 * @param source	- Parcel that we will use to pass data
-	 */
-	public Match(Parcel source) {
-		String[] data = new String[7];	//Size of String[] contained in source
-		source.writeStringArray(data);
-
-		this.name = data[0];
-		this.bio = data[1];
-		this.phone = data[2];
-		this.program = data[3];
-		this.year = data[4];
-		this.photo = new Photo(data[5]);
-		this.courses = new ArrayList<>();
-
-		//Unpackaging Course list, see writeToParcel for packaging protocol
-		String[] courseStringList = data[6].split(COURSE_LIST_DELIMITER);
-		for(String s : courseStringList) {
-			this.courses.add(new Course(s));
-		}
-	}
 
     public String getName() {
         return name;
@@ -89,52 +66,74 @@ public class Match implements Parcelable {
 		return year;
 	}
 
+    /**
+     * Constructor to create Match from Parcel
+     * Parcel is created in writeToParcel method
+     * Allows Match objects to be sent via intents
+     * @param in    -The Parcel we use to create the Match
+     */
+    protected Match(Parcel in) {
+        name = in.readString();
+        bio = in.readString();
+        phone = in.readString();
+        program = in.readString();
+        year = in.readString();
+        photo = new Photo(in.readString());
+        if (in.readByte() == 0x01) {    //Signals start of list
+            courses = new ArrayList<>();
+            in.readList(courses, Course.class.getClassLoader());
+        } else {    //List was null, so set list to null
+            courses = null;
+        }
+    }
 
-	/************************************
-	 * Parcelable method implementations
-	 * Used for creating and formatting
-	 * the Parcel, and recreating a Match
-	 * from the Parcel
-	 ***********************************/
 
-	/**
-	 * Class descriptor, used as flag in writeToParcel
-	 * @return	- Class descriptor
-	 */
-	@Override
-	public int describeContents() {
-		return 0;
-	}
+    /************************************
+     * Parcelable method implementations
+     * Used for creating and formatting
+     * the Parcel, and recreating a Match
+     * from the Parcel
+     ***********************************/
 
-	/**
-	 * Main method for creating a Parcel of Match's data
-	 * @param dest	- The Parcel to be written
-	 * @param flags	- The Parcel descriptor
-	 */
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		//Creating formatted string for parceling Course objects as Strings
-		//To be remade after being un-parcelled using Course(String) constructor
-		//TODO: Implement Parcelable in Course, use writeTypedList() to write courses
-		String courseListString = "";
-		for(Course c : this.courses) {
-			courseListString += c.getName() + COURSE_LIST_DELIMITER;
-		}
+    /**
+     * Class descriptor, used as flag in writeToParcel
+     * @return	- Class descriptor
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
-		dest.writeStringArray(new String[]{ this.name, this.bio, this.phone, this.program,
-			this.year, this.photo.base64(), courseListString});
-	}
+    /**
+     * Main method for creating a Parcel of Match's data
+     * @param dest	- The Parcel to be written
+     * @param flags	- The Parcel descriptor
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(bio);
+        dest.writeString(phone);
+        dest.writeString(program);
+        dest.writeString(year);
+        dest.writeString(photo.base64());
+        if (courses == null) {
+            dest.writeByte((byte) (0x00));  //Marks end of Parcel if courses is null
+        } else {
+            dest.writeByte((byte) (0x01));  //Marks start of list
+            dest.writeList(courses);
+        }
+    }
 
-	public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+    public static final Parcelable.Creator<Match> CREATOR = new Parcelable.Creator<Match>() {
+        @Override
+        public Match createFromParcel(Parcel in) {
+            return new Match(in);
+        }
 
-		@Override
-		public Match createFromParcel(Parcel source) {
-			return new Match(source);
-		}
-
-		@Override
-		public Match[] newArray(int size) {
-			return new Match[size];
-		}
-	};
+        @Override
+        public Match[] newArray(int size) {
+            return new Match[size];
+        }
+    };
 }

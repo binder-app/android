@@ -74,9 +74,7 @@ public class ViewMatchesActivity extends Activity {
         }
 
         //Get list of matches
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-        matches = extras.getParcelable("matches");
+        matches = getIntent().getParcelableArrayListExtra("matches");
         showNewMatch();
     }
 
