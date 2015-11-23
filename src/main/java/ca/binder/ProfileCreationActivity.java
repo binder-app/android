@@ -10,7 +10,17 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.widget.*;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import ca.binder.domain.Course;
 import ca.binder.domain.CourseListManager;
 import ca.binder.domain.Profile;
@@ -20,11 +30,6 @@ import ca.binder.remote.Photo;
 import ca.binder.remote.Server;
 import ca.binder.remote.request.AsyncServerRequest;
 import ca.binder.remote.request.UpdateProfileRequest;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author SheldonCOMP4980
@@ -48,7 +53,7 @@ public class ProfileCreationActivity extends Activity {
 
         setContentView(R.layout.profile_creation_activity_layout);
 
-        uploadImageView = (ImageView)findViewById(R.id.add_user_image);
+        uploadImageView = (ImageView) findViewById(R.id.takePhotoBtn);
         uploadImageView.setImageDrawable(getResources().getDrawable(R.drawable.add_user));
         fillYearSpinner();
 

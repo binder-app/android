@@ -10,12 +10,12 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:id="@+id/add_user_image"
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.32"
         android:nextFocusUp="@id/parent_layout"
-        android:src="@drawable/add_user"
-        android:layout_marginTop="10dp"/>
+        android:src="@drawable/take_picture_image"
+        android:layout_marginTop="10dp"
+        android:id="@+id/takePhotoBtn"/>
 
     <EditText
         android:layout_width="match_parent"
