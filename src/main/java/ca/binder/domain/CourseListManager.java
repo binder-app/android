@@ -19,7 +19,7 @@ public class CourseListManager {
 
 	private AssetManager assetManager;
 
-	private List<Course> courseList;
+	private List<String> courseList;
 
 	private final String LOG_TAG = "CourseListManager";
 
@@ -30,7 +30,7 @@ public class CourseListManager {
 			BufferedReader br = new BufferedReader(new InputStreamReader(assetManager.open("courses.txt")));
 			String line;
 			while ((line = br.readLine()) != null) {
-				courseList.add(new Course(line));
+				courseList.add(line); //can be changed to Course array in future if necessary
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -45,7 +45,7 @@ public class CourseListManager {
 		return instance;
 	}
 
-	public List<Course> getCourseList() {
+	public List<String> getCourseList() {
 		return courseList;
 	}
 
