@@ -54,7 +54,7 @@ public class ProfileCreationActivity extends Activity {
         setContentView(R.layout.profile_creation_activity_layout);
 
         uploadImageView = (ImageView) findViewById(R.id.takePhotoBtn);
-        uploadImageView.setImageDrawable(getResources().getDrawable(R.drawable.add_user));
+        uploadImageView.setImageDrawable(getResources().getDrawable(R.drawable.take_picture_image));
         fillYearSpinner();
 
         uploadImageView.setOnClickListener(new View.OnClickListener() {
@@ -111,6 +111,12 @@ public class ProfileCreationActivity extends Activity {
         if (formValid()) {
             createProfile();
         }
+    }
+
+    //Ensure back quits app rather than returning to MainActivity
+    @Override
+    public void onBackPressed() {
+        this.finishAffinity();
     }
 
     /**

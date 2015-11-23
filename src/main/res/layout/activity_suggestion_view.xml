@@ -37,7 +37,7 @@
                 android:visibility="visible"
                 android:enabled="false"
                 android:layout_centerInParent="true"
-                android:textColor="@color/binder_yellow"
+                android:textColor="@color/binder_dk_blue"
                 android:textStyle="bold"/>
         </RelativeLayout>
 
