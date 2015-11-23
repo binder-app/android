@@ -4,8 +4,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import ca.binder.android.NullPhoto;
 import ca.binder.domain.Profile;
 import ca.binder.domain.ProfileBuilder;
+import ca.binder.remote.Photo;
 import ca.binder.remote.Server;
 import ca.binder.remote.request.DislikeSuggestionRequest;
 import ca.binder.remote.request.GetMatchesRequest;
@@ -27,7 +29,8 @@ public class BinderRemotingTest {
 	}
 
 	private Profile createTestProfile() {
-		return ProfileBuilder.start(id).bio("I am a test.").phone("2501234567").name("Test").year("Year 3").program("Testing").build();
+		Photo photo = new Photo(new NullPhoto().base64());
+		return ProfileBuilder.start(id).bio("I am a test.").phone("2501234567").name("Test").year("Year 3").program("Testing").photo(photo).build();
 	}
 
 	@Test
