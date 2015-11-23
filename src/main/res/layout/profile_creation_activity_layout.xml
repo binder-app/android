@@ -63,14 +63,66 @@
             android:id="@+id/year_input" />
     </LinearLayout>
 
-    <EditText
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/course_list"
-        android:inputType="textMultiLine"
-        android:lines="4"
-        android:hint="Class List\nXMPL 1100\nXMPL 1650"
-        android:nextFocusUp="@id/parent_layout" />
+        android:weightSum="1">
+
+        <!--<EditText-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/course_list"-->
+        <!--android:inputType="textMultiLine"-->
+        <!--android:lines="4"-->
+        <!--android:hint="Class List\nXMPL 1100\nXMPL 1650"-->
+        <!--android:nextFocusUp="@id/parent_layout" />-->
+        <AutoCompleteTextView
+            android:layout_width="258dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/addCourseTextView"
+            android:inputType="textMultiLine"
+            android:lines="1"
+            android:hint="Find Courses"
+            android:nextFocusUp="@id/parent_layout"
+            android:completionThreshold="1"
+            android:layout_weight="0.5"/>
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/addCourseBtn"
+            android:src="@drawable/android_add"
+            android:layout_gravity="center"
+            android:layout_weight=".5"/>
+    </LinearLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:id="@+id/userCoursesListView"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:layout_marginLeft="5dp">
+
+    </ListView>
+
+    <TextView
+        android:id="@+id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/no_courses"/>
+    <!--TODO show list added-->
+    <!--<EditText-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:id="@+id/course_list"-->
+    <!--android:inputType="textMultiLine"-->
+    <!--android:lines="4"-->
+    <!--android:hint="Class List\nXMPL 1100\nXMPL 1650"-->
+    <!--android:nextFocusUp="@id/parent_layout" />-->
 
     <EditText
         android:layout_width="match_parent"

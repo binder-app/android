@@ -10,10 +10,14 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -44,12 +48,21 @@ public class ProfileCreationActivity extends Activity {
     private Dialog currentDialog;
     private Profile profile;
 
+    private AutoCompleteTextView addCourseTextView;
+    private ImageView addCourseBtn;
+
+    private ListView userCoursesListView;
+    private ArrayAdapter<String> userCoursesAdapter;
+
+    private List<String> selectedCourseNames;
+
     private CourseListManager courseListManager;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         courseListManager = CourseListManager.getInstance(this);
+        selectedCourseNames = new ArrayList<String>();
 
         setContentView(R.layout.profile_creation_activity_layout);
 
@@ -64,8 +77,79 @@ public class ProfileCreationActivity extends Activity {
                 startActivityForResult(intent, IMAGE_CAPTURE_REQUEST_CODE);
             }
         });
+
+        ArrayAdapter<String> coursesAvailableAdapter = new ArrayAdapter<String>(this, R.layout.course_item_view, R.id.courseNameTextView, courseListManager.getCourseList());
+        addCourseTextView = (AutoCompleteTextView) findViewById(R.id.addCourseTextView);
+        addCourseTextView.setAdapter(coursesAvailableAdapter);
+
+        userCoursesAdapter = new ArrayAdapter<String>(this, R.layout.course_item_view, R.id.courseNameTextView, selectedCourseNames);
+        userCoursesListView = (ListView) findViewById(R.id.userCoursesListView);
+        userCoursesListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ProfileCreationActivity.this);
+                currentDialog = builder.setMessage("Remove " + parent.getAdapter().getItem(position) + "?").setCancelable(false).setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        removeCourse(position);
+                        currentDialog.cancel();
+                    }
+                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        currentDialog.cancel();
+                    }
+                }).create();
+                currentDialog.show();
+                return false;
+            }
+        });
+
+        TextView emptyCourseListTextView = (TextView) findViewById(R.id.empty);
+        userCoursesListView.setEmptyView(emptyCourseListTextView);
+        userCoursesListView.setAdapter(userCoursesAdapter);
+
+        addCourseBtn = (ImageView) findViewById(R.id.addCourseBtn);
+        addCourseBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addCourse(addCourseTextView.getText().toString());
+            }
+        });
     }
 
+    private void addCourse(String name) {
+        if (!isCourseValid(name)) {
+            //
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            currentDialog = builder.setMessage("Please choose a valid course from the list.").setCancelable(false).setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    currentDialog.cancel();
+                }
+            }).create();
+            currentDialog.show();
+            addCourseTextView.setText("");
+            return;
+        }
+
+        userCoursesAdapter.add(name);
+        userCoursesAdapter.notifyDataSetChanged();
+        addCourseTextView.setText("");
+
+    }
+
+    private void removeCourse(int index) {
+        selectedCourseNames.remove(index);
+        userCoursesAdapter.notifyDataSetChanged();
+    }
+
+    private boolean isCourseValid(String name) {
+        List<String> possible = courseListManager.getCourseList();
+        for (String s : possible) {
+            if (name.equals(s)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * Create list of years available and populate the spinner with those options
@@ -135,15 +219,15 @@ public class ProfileCreationActivity extends Activity {
         inputToError.put(R.id.name_input, "Name cannot be empty!");
         inputToError.put(R.id.phone_no_input, "Phone Number cannot be empty!");
         inputToError.put(R.id.program_input, "Degree Program cannot be empty!");
-        inputToError.put(R.id.course_list, "Class List cannot be empty!");
 
         for (Map.Entry<Integer, String> check : inputToError.entrySet()) {
-            if (failsValidation(check.getKey(), check.getValue())) {
+            if (textViewFailsValidation(check.getKey(), check.getValue())) {
                 return false;
             }
         }
 
-        return true;
+        return !courseListFailsValidation();
+
     }
 
     /**
@@ -160,7 +244,7 @@ public class ProfileCreationActivity extends Activity {
                 .bio(text(R.id.user_bio))
                 .photo(photo);
 
-        for (String course : text(R.id.course_list).split("\n")) {
+        for (String course : selectedCourseNames) {
             builder.course(new Course(course));
         }
 
@@ -186,7 +270,7 @@ public class ProfileCreationActivity extends Activity {
      * @param error string to show user if validation fails
      * @return true if validation failed for input
      */
-    private boolean failsValidation(int textView, String error) {
+    private boolean textViewFailsValidation(int textView, String error) {
         EditText toCheck = (EditText)findViewById(textView);
         if(toCheck.getText().length() == 0) {
             Toast toast = Toast.makeText(getApplicationContext(),
@@ -195,6 +279,15 @@ public class ProfileCreationActivity extends Activity {
             return true;
         }
         return false;
+    }
+
+    private boolean courseListFailsValidation() {
+        if (selectedCourseNames.size() > 0) {
+            return false;
+        }
+        Toast toast = Toast.makeText(getApplicationContext(), "You must select at least one course!", Toast.LENGTH_SHORT);
+        toast.show();
+        return true;
     }
 
     private String text(int inputId) {
