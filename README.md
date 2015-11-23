@@ -1,10 +1,7 @@
 # Binder - Android App
 
 by
-Chris Foster
-Mitch Hentges
-Sheldon Roddick
-Steve Lyall
+Chris Foster, Mitch Hentges, Sheldon Roddick and Steve Lyall
 
 Binder is currently under development. We appreciate your feedback on the app as well as any input and suggestions you might have. Feel free to email us at binderappdevelopment@gmail.com or connect with us on GitHub at https://github.com/binder-app/android.
 
