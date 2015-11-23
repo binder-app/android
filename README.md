@@ -9,6 +9,11 @@ Binder is currently under development. We appreciate your feedback on the app as
 Binder is an Android application designed to match students with study buddies. It is accessible to anyone with an Android device running Android 4.1 or later.
 
 ##Initial Set-Up
+
+###Installation Note
+If you have recieved an evaluation copy of Binder as an .apk file, download it to your Android device and open it to install the app. You may need to allow installation of applications from sources other than the Google Play Store, under *Settings -> Security -> Unknown Sources*.
+
+###Getting Started
 When you first launch the app, you will be asked to complete your profile, which includes your name, photo, phone number (this lets you get in touch with your matches), program of study, academic year, courses in progress and a short biography.
 
 To take a photo, tap the grey camera icon.
